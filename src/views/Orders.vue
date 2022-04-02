@@ -3,7 +3,7 @@
     <h3>Previous orders</h3>
   </div>
   <v-list>
-    <v-list-item v-for="(o, index) in orders" :key="index">
+    <v-list-item v-for="(o, index) in sortedOrders" :key="index">
       <v-list-item-content class="order">
           <v-card
           class="order-card"
@@ -19,7 +19,7 @@
 </template>
 
 <script>
-import { getOrdersSortedByDate } from "../server/db.js";
+import { getOrders } from "../server/db.js";
 import OrderCard from "../components/OrderCard.vue";
 export default {
   name: "Orders",
@@ -28,6 +28,19 @@ export default {
       type: Object,
       default: () => {},
     },
+  },
+  computed: {
+    sortedOrders: function() {
+      function compare(a, b) {
+        if (a.date < b.date)
+          return 1;
+        if (a.date > b.date)
+          return -1;
+        return 0;
+      }
+
+      return this.orders.sort(compare);
+    }
   },
   components: {
     OrderCard,
@@ -38,7 +51,7 @@ export default {
   }),
   methods: {
     async getAllOrders() {
-      this.orders = await getOrdersSortedByDate(this.id);
+      this.orders = await getOrders(this.id);
     },
   },
   async created() {

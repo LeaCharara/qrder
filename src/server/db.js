@@ -17,10 +17,9 @@ const db = getFirestore(firebaseApp);
 const restaurantsCollection = collection(db,"restaurants")
 const ordersCollection = collection(db,"orders")
 
-export const getOrdersSortedByDate = async () => {
+export const getOrders = async () => {
   const Orders = await getDocs(ordersCollection);
   let ord = []
-  //Orders.sort((a,b)=> a.date - b.date);
   Orders.forEach((doc) => {
     ord.push({
       id : doc.id,
