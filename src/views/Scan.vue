@@ -23,7 +23,7 @@ export default {
       this.showMenu(id)
     },
     showMenu(id){
-        this.$router.push({name: 'menu', params: {id: id, isLandscape: this.isLandscape}})
+        this.$router.push({name: 'menu', params: {id: id, isLandscape: this.isLandscape, fromPageScan: true}})
     },
     async onInit(promise) {
       try {

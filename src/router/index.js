@@ -4,6 +4,7 @@ import Menu from "../views/Menu.vue";
 import Catalog from "../views/Catalog.vue";
 import RestaurantDescription from "../views/RestaurantDescription.vue";
 import Scan from "../views/Scan.vue";
+import Login from "../views/Login.vue";
 
 const routes = [
   {
@@ -36,6 +37,11 @@ const routes = [
     component: Scan,
     props : true,
   },
+  {
+    path: "/login",
+    name : 'login',
+    component: Login,
+  }
 ];
 
 const router = createRouter({

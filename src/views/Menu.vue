@@ -17,11 +17,12 @@
           :key="item.name"
           style="padding: 20px; margin-top: 20px"
         >
-          <MenuItemCard :item="item" />
+          <MenuItemCard :fromPageScan="fromPageScan" :item="item" @updateQuantity="updateQuantity($event)"/>
         </v-card>
       </v-list-item-content>
     </v-list-item>
   </v-list>
+  <v-btn v-if="fromPageScan" class="orderbtn">Order</v-btn>
 </template>
 
 <script>
@@ -29,7 +30,7 @@ import { getRestaurant, getRestaurantMenu } from "../server/db.js";
 import MenuItemCard from "../components/MenuItemCard.vue";
 export default {
   name: "Menu",
-  props: ["id", "isLandscape"],
+  props: ["id", "isLandscape", "fromPageScan"],
   components: {
     MenuItemCard,
   },
@@ -38,6 +39,7 @@ export default {
       title: "",
       menu_types: {},
     },
+    orderedItem : []
   }),
   methods: {
     async getMenu() {
@@ -52,6 +54,14 @@ export default {
       } else
         this.$router.push({ name: "description", params: { id: this.id } });
     },
+    updateQuantity(item){
+      const index = this.orderedItem.findIndex(element => element.id === item.id);
+      if(index != -1) {
+        if (item.quantity === 0) this.orderedItem.splice(index, 1)
+        else this.orderedItem[index] = {...item}
+      }
+      else this.orderedItem.push({...item})
+    }
   },
   async created() {
     await this.getMenu();
@@ -78,6 +88,13 @@ export default {
 @media screen and (min-width: 780px) {
   .item-card{ max-height: 270px; }
   .item-types{ font-size: 30px;}
+}
+.orderbtn {
+  width: 100%;
+  position : fixed;
+  bottom : 8%;
+  background-color : black;
+  color : white;
 }
 
 </style>

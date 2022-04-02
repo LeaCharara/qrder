@@ -1,7 +1,7 @@
 <template>
   <v-row>
     <v-col cols="4" sm="3">
-      <v-img width="100%" height="100%" :src="item.img"></v-img>
+      <v-img width="100%"  :src="item.img"></v-img>
     </v-col>
     <v-col cols="8" sm="9">
       <v-row>
@@ -29,6 +29,13 @@
           item.description
         }}</v-list-item-subtitle>
       </v-row>
+      <v-col class="d-flex justify-center align-center" style="margin-top:5%" v-if="fromPageScan">
+        <v-icon class="buttonIcons" style="margin-right : 10px" @click="substract">mdi-minus</v-icon>
+        <span :class="[
+              this.$vuetify.display.smAndUp ? 'otherFontSize' : 'smallFontSize',
+            ]" >{{this.currentItem.quantity}}</span>
+        <v-icon class="buttonIcons" style="margin-left : 10px" @click="add">mdi-plus</v-icon>
+      </v-col>
     </v-col>
   </v-row>
 </template>
@@ -40,6 +47,27 @@ export default {
       type: Object,
       default: () => {},
     },
+    fromPageScan : {
+      type : String,
+      default: false,
+    }
+  },
+  data: () => ({
+    currentItem : {}
+  }),
+  methods: {
+    add(){
+      this.currentItem.quantity = this.currentItem.quantity + 1;
+      this.$emit('updateQuantity',{id : this.currentItem.id, quantity : this.currentItem.quantity, name: this.currentItem.name, price: this.currentItem.price})
+    },
+    substract(){
+      this.currentItem.quantity > 0 ? this.currentItem.quantity = this.currentItem.quantity - 1 : this.currentItem.quantity = 0;
+      this.$emit('updateQuantity',{id : this.currentItem.id, quantity : this.currentItem.quantity, name: this.currentItem.name, price: this.currentItem.price})
+    }
+  },
+  created () {
+    this.currentItem = {...this.item}
+    this.currentItem.quantity = 0;
   },
 };
 </script>
@@ -60,5 +88,8 @@ h4 {
   font-size: 24px;
 }
 
-
+.buttonIcons {
+  border: 1px solid;
+  border-radius: 50px;
+}
 </style>

@@ -47,6 +47,7 @@
 </template>
 
 <script>
+export default {
 data: () => ({
     isValid: true,
     username: '',
@@ -73,5 +74,5 @@ data: () => ({
         
     }
   },
-})
+}
 </script>
