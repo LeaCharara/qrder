@@ -1,12 +1,12 @@
 <template>
   <div class="top-bar">
-    <v-icon @click="Back" style="margin-right: 20px"
+    <v-icon v-if="!fromPageScan" @click="Back" style="margin-right: 20px"
       >mdi-arrow-left-thick</v-icon
     ><h3>{{ menu.title }}</h3>
   </div>
   <v-list>
     <v-list-item v-for="(m, index) in menu.menu_types" :key="index">
-      <v-list-item-content class="menu">
+      <div class="menu">
         <v-list-item-title class="item-types">{{ m.title }}</v-list-item-title>
         <v-divider />
         <v-card
@@ -19,10 +19,10 @@
         >
           <MenuItemCard :fromPageScan="fromPageScan" :item="item" @updateQuantity="updateQuantity($event)"/>
         </v-card>
-      </v-list-item-content>
+      </div>
     </v-list-item>
   </v-list>
-  <v-btn v-if="fromPageScan" class="orderbtn">Order</v-btn>
+  <v-btn v-if="fromPageScan" @click="viewCart" class="orderbtn">Order</v-btn>
 </template>
 
 <script>
@@ -30,7 +30,20 @@ import { getRestaurant, getRestaurantMenu } from "../server/db.js";
 import MenuItemCard from "../components/MenuItemCard.vue";
 export default {
   name: "Menu",
-  props: ["id", "isLandscape", "fromPageScan"],
+  props: {
+    id : {
+      type : String,
+      default : ""
+    },
+    isLandscape : {
+      type : String,
+      default : false
+    },
+    fromPageScan : {
+      type : Boolean,
+      default : false
+    }
+    },
   components: {
     MenuItemCard,
   },
@@ -61,6 +74,9 @@ export default {
         else this.orderedItem[index] = {...item}
       }
       else this.orderedItem.push({...item})
+    },
+    viewCart(){
+      this.$router.push({name: 'recap', params: {order:JSON.stringify(this.orderedItem)}})
     }
   },
   async created() {
