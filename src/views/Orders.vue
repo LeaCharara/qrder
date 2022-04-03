@@ -76,4 +76,5 @@ export default {
   .order-card{ max-height: 270px; }
 }
 
+
 </style>

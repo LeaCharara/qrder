@@ -1,43 +1,45 @@
 <template>
-  <v-row>
-    <v-col cols="4" sm="3">
-      <v-img width="100%"  :src="item.img"></v-img>
-    </v-col>
-    <v-col cols="8" sm="9">
-      <v-row>
-        <v-col cols="8">
-          <h4
-            :class="[
-              this.$vuetify.display.smAndUp ? 'otherFontSize' : 'smallFontSize',
-            ]"
-          >
-            {{ item.name }}
-          </h4>
-        </v-col>
-        <v-col cols="4" align="right">
-          <h4
-            :class="[
-              this.$vuetify.display.smAndUp ? 'otherFontSize' : 'smallFontSize',
-            ]"
-          >
-            {{ item.price }} $
-          </h4>
-        </v-col>
-      </v-row>
-      <v-row>
-        <v-list-item-subtitle class="description">{{
-          item.description
-        }}</v-list-item-subtitle>
-      </v-row>
-      <v-col class="d-flex justify-center align-center" style="margin-top:5%" v-if="fromPageScan">
-        <v-icon class="buttonIcons" style="margin-right : 10px" @click="substract">mdi-minus</v-icon>
-        <span :class="[
-              this.$vuetify.display.smAndUp ? 'otherFontSize' : 'smallFontSize',
-            ]" >{{this.currentItem.quantity}}</span>
-        <v-icon class="buttonIcons" style="margin-left : 10px" @click="add">mdi-plus</v-icon>
+  <v-container>
+    <v-row>
+      <v-col cols="4" sm="3">
+        <v-img class="img-height" :src="item.img"></v-img>
       </v-col>
-    </v-col>
-  </v-row>
+      <v-col cols="8" sm="9">
+        <v-row>
+          <v-col cols="8">
+            <h4
+              :class="[
+                this.$vuetify.display.smAndUp ? 'otherFontSize' : 'smallFontSize',
+              ]"
+            >
+              {{ item.name }}
+            </h4>
+          </v-col>
+          <v-col cols="4" align="right">
+            <h4
+              :class="[
+                this.$vuetify.display.smAndUp ? 'otherFontSize' : 'smallFontSize',
+              ]"
+            >
+              {{ item.price }} $
+            </h4>
+          </v-col>
+        </v-row>
+        <v-row>
+          <v-list-item-subtitle class="description">{{
+            item.description
+          }}</v-list-item-subtitle>
+        </v-row>
+        <v-col class="d-flex justify-center align-center" style="margin-top:5%" v-if="fromPageScan">
+          <v-icon class="buttonIcons" style="margin-right : 10px" @click="substract">mdi-minus</v-icon>
+          <span :class="[
+                this.$vuetify.display.smAndUp ? 'otherFontSize' : 'smallFontSize',
+              ]" >{{this.currentItem.quantity}}</span>
+          <v-icon class="buttonIcons" style="margin-left : 10px" @click="add">mdi-plus</v-icon>
+        </v-col>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script>
@@ -91,5 +93,8 @@ h4 {
 .buttonIcons {
   border: 1px solid;
   border-radius: 50px;
+}
+.img-height{
+  max-height: 200px;
 }
 </style>

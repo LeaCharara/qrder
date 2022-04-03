@@ -1,20 +1,22 @@
 <template>
     <v-row>
-        <v-col cols="4" sm="3">
-        <v-img width="100%" height="100%" :src="order.img"></v-img>
+        <v-col sm="4">
+        <v-img class="img-height" width="100%" height="100%" :src="order.img"></v-img>
         </v-col>
-        <v-col cols="6" sm="7">
+        <v-col sm="5">
           <v-list-item-title>
               {{ order.restaurantName }}
           </v-list-item-title>
-          <v-list-item-subtitle>
-              {{ order.description }}
+          <v-list-item-subtitle
+            v-model="maxLength"
+          >
+              {{ order.description.substr(0, maxLength) }}
           </v-list-item-subtitle>
-          <v-list-item-subtitle>
+          <v-list-item-subtitle align-self="end">
               {{ format_date(order.date) }} - {{ order.total }} $ CA
           </v-list-item-subtitle>
         </v-col>
-        <v-col cols="2" sm="2" align-self="center">
+        <v-col sm="3" align-self="center">
             <div class="text-center align">
                 <v-btn
                 rounded
@@ -47,6 +49,11 @@ export default {
           }
       },
   },
+  data() {
+    return{
+      maxLength : 50
+    }
+  },
 };
 </script>
 
@@ -54,17 +61,7 @@ export default {
 h4 {
   margin-left: -12px;
 }
-.description {
-  margin-bottom: 20px;
+.img-height{
+  max-height: 200px;
 }
-
-.smallFontSize {
-  font-size: 14px;
-}
-
-.otherFontSize {
-  font-size: 24px;
-}
-
-
 </style>

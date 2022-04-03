@@ -22,7 +22,7 @@
 
     </v-btn>
 
-    <v-btn style="color:white" disabled @click="value='Profile'"  value="Profile">
+    <v-btn style="color:white" @click="value='Profile'"  value="Profile">
       <v-icon>mdi-account</v-icon>
             <span>Profile</span>
 
