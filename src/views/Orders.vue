@@ -1,7 +1,4 @@
 <template>
-  <div class="top-bar">
-    <h3>Previous orders</h3>
-  </div>
   <v-list>
     <v-list-item v-for="(o, index) in sortedOrders" :key="index">
       <v-list-item-content class="order">
@@ -64,13 +61,6 @@ export default {
 
 .order {
   width: 100%;
-}
-.top-bar {
-  color: white;
-  background-color: black;
-  padding: 20px;
-  display: flex;
-  justify-content: center;
 }
 @media screen and (min-width: 780px) {
   .order-card{ max-height: 270px; }
