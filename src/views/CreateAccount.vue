@@ -2,19 +2,30 @@
   <div>
     <h1>Create Account </h1>
     <v-form 
+      class ="form"
       v-model="isValid"
       ref="form"
       lazy-validation
     >
       <v-text-field
-        v-model="username"
-        :rules="usernameRules"
-        label="Username"
+        v-model="Name"
+        class="field"
+        :rules="nameRules"
+        label="Name"
+        required
+      ></v-text-field>
+
+      <v-text-field
+        v-model="LastName"
+        class="field"
+        :rules="nameRules"
+        label="LastName"
         required
       ></v-text-field>
   
       <v-text-field
         v-model="password"
+        class="field"
         :append-icon="show ? 'mdi-eye' : 'mdi-eye-off'"
         :rules="passwordRules"
         :type="show ? 'text' : 'password'"
@@ -25,6 +36,7 @@
 
       <v-text-field
         v-model="confirmPassword"
+        class="field"
         :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
         :rules="passwordRules"
         :type="show1 ? 'text' : 'password'"
@@ -35,17 +47,25 @@
 
       <v-text-field
         v-model="email"
+        class="field"
         :rules="emailRules"
         label="E-mail"
         required
       ></v-text-field> 
-      
+
+      <v-text-field
+        v-model="phone"
+        class="field"
+        :rules="phoneRules"
+        label="Phone number"
+        required
+      ></v-text-field> 
+
       <div class="red--text"> {{errorMessage}}</div>
 
       <v-btn
         :disabled="!isValid"
-        color="success"
-        class="mr-4"
+        class="create-btn"
         @click="validate"
       >
         Confirm
@@ -57,30 +77,35 @@
 </template>
 
 <script>
+export default {
 data: () => ({
     isValid: true,
-    username: '',
+    name: '',
     password:'',
     confirmPassword:'',
+    phone:'',
+    email:'',
     errorMessage: "",
     show: false,
     show1: false,
-    usernameRules: [
+    nameRules: [
       v => !!v || 'Name is required',
     ],
-    password: '',
     passwordRules: [
       v => !!v || 'Password is required',
       v => (v && v.length >= 8) || 'Password must have 8+ characters',
       v => /(?=.*[A-Z])/.test(v) || 'Must have one uppercase character', 
-    v => /(?=.*\d)/.test(v) || 'Must have one number', 
-    v => /([!@$%])/.test(v) || 'Must have one special character [!@#$%]'
+      v => /(?=.*\d)/.test(v) || 'Must have one number', 
+      v => /([!@$%])/.test(v) || 'Must have one special character [!@#$%]'
     ],
-    email: '',
     emailRules: [
       v => !!v || 'E-mail is required',
       v => /.+@.+\..+/.test(v) || 'E-mail must be valid',
     ],
+    phoneRules:[
+      v => !!v && !isNaN(parseFloat(v)) || 'Phone is required',
+      v => ( v.length = 10) || 'Phone number must have 10 digits',
+    ]
   }),
 
   methods: {
@@ -92,5 +117,25 @@ data: () => ({
        }
     },
   },
-})
+}
+
 </script>
+<style lang="scss" scoped>
+h1{
+  text-align : center;
+  padding : 5%;
+}
+.form{
+padding : 5%;
+} 
+.v-input__details{
+  margin-bottom : 0;
+}
+.create-btn{
+  color : white;
+  background-color : black;
+  margin-left: 65%;
+  margin-bottom : 10%;
+}
+
+</style>
