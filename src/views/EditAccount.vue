@@ -10,19 +10,53 @@
                     <img src="https://upload.wikimedia.org/wikipedia/commons/0/0c/Cow_female_black_white.jpg"> 
                 </v-avatar>
             </v-row>
-            <v-col align="center" class="name">
-                <v-text-field v-model="message1" label="First Name" placeholder="TEST" background-color="transparent" clearable></v-text-field>
-                <v-text-field v-model="message1" label="Last Name" placeholder="NAME" clearable></v-text-field>
+             <v-col align="center">
+                <v-text-field
+                    v-model="Name"
+                    :rules="nameRules"
+                    label="Name"
+                    required
+                ></v-text-field>
+                <v-text-field
+                    v-model="password"
+                    :append-icon="show ? 'mdi-eye' : 'mdi-eye-off'"
+                    :rules="passwordRules"
+                    :type="show ? 'text' : 'password'"
+                    label="Password"
+                    required
+                    @click:append="show = !show"
+                ></v-text-field> 
+
+                <v-text-field
+                    v-model="confirmPassword"
+                    :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
+                    :rules="passwordRules"
+                    :type="show1 ? 'text' : 'password'"
+                    label="Confirm Password"
+                    required
+                    @click:append="show1 = !show1"
+                ></v-text-field>
+                <v-text-field
+                    v-model="email"
+                    :rules="emailRules"
+                    label="E-mail"
+                    required
+                ></v-text-field> 
+
+                <v-text-field
+                    v-model="phone"
+                    :rules="phoneRules"
+                    label="Phone number"
+                    required
+                ></v-text-field> 
+
+                <v-btn
+                class="save_button"
+                :disabled="!isValid"
+                @click="save">Save</v-btn>
+                
             </v-col>
         </section>
-
-        <v-row class="buttons">
-                <!-- <v-row> -->
-                    <v-btn @click="cancel" class="cancel">Cancel</v-btn>
-                    <v-btn @click="save" class="save">Save Changes</v-btn>
-                <!-- </v-row> -->
-                <v-btn @click="deleteAcc" class="delete">Delete Account</v-btn>
-        </v-row>
     </div>
     <!-- </v-main> -->
 </template>
@@ -31,7 +65,26 @@
 import { getUserInfo } from "../server/db.js";
     export default {
         name: "Profile",
-        
+        show : false,
+        show1 : false,
+        nameRules: [
+        v => !!v || 'Name is required',
+        ],
+        passwordRules: [
+        v => !!v || 'Password is required',
+        v => (v && v.length >= 8) || 'Password must have 8+ characters',
+        v => /(?=.*[A-Z])/.test(v) || 'Must have one uppercase character', 
+        v => /(?=.*\d)/.test(v) || 'Must have one number', 
+        v => /([!@$%])/.test(v) || 'Must have one special character [!@#$%]'
+        ],
+        emailRules: [
+        v => !!v || 'E-mail is required',
+        v => /.+@.+\..+/.test(v) || 'E-mail must be valid',
+        ],
+        phoneRules:[
+        v => !!v && !isNaN(parseFloat(v)) || 'Phone is required',
+        v => ( v.length = 10) || 'Phone number must have 10 digits',
+        ],
         computed: {
             avatar () {
                 // return "background-image: url('" + this.user.src + "');";
@@ -39,17 +92,9 @@ import { getUserInfo } from "../server/db.js";
         },
 
         methods: {
-            cancel(){
-                this.$router.push({path: "/profile"})
-            },
-
             save() {
 
             },
-
-            deleteAcc(){
-                
-            }
         }
     }
 </script>
@@ -58,7 +103,7 @@ import { getUserInfo } from "../server/db.js";
     .profile {
         &.edit {
             .avatar-wrapper {
-                padding: 10% 5%;
+                padding: 10% 15%;
 
                 position: relative;
 
@@ -70,8 +115,8 @@ import { getUserInfo } from "../server/db.js";
             }
 
             .v-avatar {
-                max-height: 200px;
-                max-width: 200px;
+                max-height: 100px;
+                max-width: 100px;
 
                 img {
                     object-fit: cover;
@@ -105,15 +150,12 @@ import { getUserInfo } from "../server/db.js";
             }
         }
 
-        .buttons .v-btn {
-                &.cancel, &.save {
+        .save_button {
                     width: 50vw;
-                }
-
-                &.save {
-                    color: #2196F3;
+                    color : white;
+                    background-color : black;
                     border-left: solid thin black;
                 }
-        }
+    
     }
 </style>
