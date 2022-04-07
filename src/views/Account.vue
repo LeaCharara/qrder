@@ -9,16 +9,41 @@
                     <img src="https://upload.wikimedia.org/wikipedia/commons/0/0c/Cow_female_black_white.jpg"> 
                 </v-avatar>
             </v-row>
-            <v-col align="center" class="name">
-                    <p> TEST NAME </p> 
-                    <p class="orders"> Orders: 20 </p>
+            <v-col align="center">
+                <v-text-field
+                    label="John Doe"
+                    value="John Doe"
+                    solo
+                    disabled
+                    prepend-icon="mdi-account"
+                ></v-text-field>
+                <v-text-field
+                    label="password"
+                    v-model="password"
+                    :type="show ? 'text' : 'password'"
+                    solo
+                    disabled
+                    prepend-icon="mdi-lock"
+                ></v-text-field>
+                <v-text-field
+                    label="abcde@homtail.com"
+                    value="Email"
+                    solo
+                    disabled
+                    prepend-icon="mdi-email"
+                ></v-text-field>
+                <v-text-field
+                    label="+1 111 222 3333"
+                    value="Phone Number"
+                    solo
+                    disabled
+                    prepend-icon="mdi-phone"
+                ></v-text-field>
+                <v-btn @click="edit">Edit Profile</v-btn>
+                <p></p>
+                <v-btn @click="deleteAcc" class="disconnect">Disconnect</v-btn>
             </v-col>
         </section>
-
-        <v-row class="buttons">
-                <v-btn @click="edit">Edit Profile</v-btn>
-                <v-btn @click="deleteAcc" class="delete">Delete Account</v-btn>
-        </v-row>
     </div>
     <!-- </v-main> -->
 </template>
@@ -27,6 +52,7 @@
 import { getUserInfo } from "../server/db.js";
     export default {
         name: "Profile",
+        show: false,
         
         computed: {
             avatar () {
@@ -47,35 +73,13 @@ import { getUserInfo } from "../server/db.js";
 
 <style lang="scss">
     .profile {
-        padding: 0 !important;
-        height: calc(100vh - 56px);
-
-        .v-row {
-            margin: 0;
+        
+        .v-text-field{
+            padding : 0;
+            margin : 0;
+            height : 20vw;
+            width : 85%;
         }
-
-        .user-info {
-            margin: 0;
-            height: 60%;
-        }
-
-        .avatar-wrapper {
-            padding: 25%;
-            padding-bottom: 10%;
-        }
-
-        #avatar {
-            background-image: url('https://upload.wikimedia.org/wikipedia/commons/0/0c/Cow_female_black_white.jpg');
-            width: 50vw;
-            height: 50vw;
-            background-size: cover;
-            background-position: center;
-            border-radius: 50%;
-
-            max-height: 300px;
-            max-width: 300px;
-        }
-
         .v-avatar {
             max-height: 300px;
             max-width: 300px;
@@ -83,42 +87,24 @@ import { getUserInfo } from "../server/db.js";
             img {
                 object-fit: cover;
                 object-position: center;
-
-                width: 50vw;
-                height: 50vw;
+                width: 40vw;
+                height: 40vw;
                 max-width: 300px;
                 max-height: 300px;
-
-                // width: 100%;
-                // height: 100%;
             }
-        }
-
-        .name {
-            padding: 0;
-
-            .orders {
-                color: #373737;
-            }
-        }
-
-        .buttons {
-            height: 40%;
-
+        } 
             .v-btn {
-                width: 100vw;
+                color : white;
+                background-color : black;
+                width : 70%;
                 height: 50%;
-                padding: 0;
-
-                box-shadow: none;
+                padding : 5%;
                 
-                border-top: solid thin black;
-                border-radius: unset;
             }
-
-            .delete {
+            .disconnect {
+                margin-top : 5%;
                 color: red;
             }
-        }
+        
     }
 </style>
