@@ -52,11 +52,13 @@ export default {
       title: "",
       menu_types: {},
     },
+    restaurantInfo : {},
     orderedItem : []
   }),
   methods: {
     async getMenu() {
       const restaurant = await getRestaurant(this.id);
+      this.restaurantInfo = {...restaurant}
       this.menu.title = restaurant.title;
       const menu = await getRestaurantMenu(this.id);
       this.menu.menu_types = menu;
@@ -76,7 +78,7 @@ export default {
       else this.orderedItem.push({...item})
     },
     viewCart(){
-      this.$router.push({name: 'recap', params: {order:JSON.stringify(this.orderedItem)}})
+      this.$router.push({name: 'recap', params: {order:JSON.stringify(this.orderedItem), resto: JSON.stringify(this.restaurantInfo)}})
     }
   },
   async created() {

@@ -56,13 +56,18 @@
             </v-col>
         </v-row>
     </v-sheet>
-     <v-btn class="descbutton">Place Order</v-btn>
+     <v-btn @click="placeOrder" class="descbutton">Place Order</v-btn>
 </template>
 
 <script>
+import {addOrder} from '../server/db.js'
 export default {
     props: {
         order: {
+            type : String,
+            default: '',
+        },
+        resto : {
             type : String,
             default: '',
         }
@@ -71,7 +76,8 @@ export default {
         subtotal: 0,
         tax : 0,
         total : 0,
-        orderDetail : []
+        orderDetail : [],
+        restaurantInfo : {}
     }),
     methods: {
         calculateSubtotal () {
@@ -80,11 +86,34 @@ export default {
         },
         calculateTax () {
             this.tax = parseFloat((this.subtotal * 0.15).toFixed(1))
-            this.total = this.tax + this.subtotal
+            console.log(this.tax + this.subtotal)
+            this.total = (this.tax + this.subtotal).toFixed(1)
+        },
+        placeOrder (){
+            const order = {
+                total : this.total,
+                user : window.localStorage.getItem('userId'),
+                ...this.restaurantInfo,
+                description : this.getDescription(),
+                lineItems : this.orderDetail
+            }
+            addOrder(order)
+
+        },
+        getDescription () {
+            let description = '';
+            this.orderDetail.map((item, index) => {
+                if(index < this.orderDetail.length - 1)
+                    description += item.name + ', '
+                else
+                    description += item.name
+            })
+            return description;
         }
     },
     created () {
         this.orderDetail = JSON.parse(this.order)
+        this.restaurantInfo = JSON.parse(this.resto)
         this.calculateSubtotal()
     }
 }

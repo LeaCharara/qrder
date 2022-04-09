@@ -1,5 +1,5 @@
 <template>
-  <v-container>
+  <!-- <v-container> -->
     <v-row>
       <v-col cols="4" sm="3">
         <v-img class="img-height" :src="item.img"></v-img>
@@ -39,7 +39,7 @@
         </v-col>
       </v-col>
     </v-row>
-  </v-container>
+  <!-- </v-container> -->
 </template>
 
 <script>
@@ -50,7 +50,7 @@ export default {
       default: () => {},
     },
     fromPageScan : {
-      type : Boolean,
+      type : String,
       default: false,
     }
   },

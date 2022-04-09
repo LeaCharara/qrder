@@ -1,5 +1,6 @@
 import {initializeApp} from 'firebase/app'
-import { getFirestore,collection,doc, getDocs,getDoc } from "firebase/firestore";
+import { getFirestore,collection,doc, getDocs,getDoc, addDoc } from "firebase/firestore";
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 export const config = { 
   apiKey: "AIzaSyBc4L-aTepKbQQkrAKJdocqCvtUo0al6Lo",
   authDomain: "qrder-eceb9.firebaseapp.com",
@@ -12,11 +13,11 @@ export const config = {
 
 
 const firebaseApp = initializeApp(config);
-
+const auth = getAuth();
 const db = getFirestore(firebaseApp);
 const restaurantsCollection = collection(db,"restaurants")
 const ordersCollection = collection(db,"orders")
-
+export default firebaseApp.messaging()
 export const getOrders = async () => {
   const Orders = await getDocs(ordersCollection);
   let ord = []
@@ -27,6 +28,25 @@ export const getOrders = async () => {
     })
   });
    return ord;
+}
+
+export const addOrder = async (order) => {
+  console.log(order);
+  const docRef = await addDoc(collection(db, "orders"), {
+    date: new Date(),
+    description: order.description,
+    img : order.img,
+    restaurantName : order.title,
+    total : order.total,
+    user : order.user,
+    status : 'Received'
+  });
+  order.lineItems.map(async item => {
+    await addDoc(collection(db, "orders", docRef.id, 'lineItems'), {
+      idItem : `/restaurants/${order.id}/menu/${item.id}`,
+      quantity : item.quantity
+    })
+  })
 }
 
 export const getRestaurants = async () => {
@@ -76,4 +96,9 @@ export const getRestaurantMenu = async(id) => {
 
   })
   return menuDictionary;
+}
+
+export const SignIn = async (email, password) => {
+  const userCredential = await signInWithEmailAndPassword(auth, email, password);
+  return userCredential.user;
 }
