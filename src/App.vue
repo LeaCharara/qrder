@@ -15,7 +15,7 @@
 <script>
 import NavBar from "../src/components/NavBar.vue";
 import { getToken } from "firebase/messaging";
-import { SignIn, getTokenFromFirebase } from "./server/db.js";
+import { SignIn } from "./server/db.js";
 export default {
   name: "App",
   components: {
@@ -29,7 +29,9 @@ export default {
     window.localStorage.setItem("token", user.accessToken);
     window.localStorage.setItem("userId", user.uid);
     this.isLandscape = window.innerWidth > window.innerHeight;
-
+    console.log('Firebase cloud messaging object', this.$messaging)
+    const token = await getToken(this.$messaging,{ vapidKey: "BKMetiMUvVfMeO7BY1sYllLWcTBK-sVr456aMlYjt49jmNJodpBB42GUXX8IvYSkSwk1gcx0dNBJzyxjqcJau3U" })
+    console.log(token)
     // await getTokenFromFirebase()
   },
   async mounted() {
