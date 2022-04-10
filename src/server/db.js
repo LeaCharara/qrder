@@ -1,6 +1,8 @@
 import {initializeApp} from 'firebase/app'
 import { getFirestore,collection,doc, getDocs,getDoc, addDoc } from "firebase/firestore";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { getMessaging, getToken, onMessage } from 'firebase/messaging';
+
 export const config = { 
   apiKey: "AIzaSyBc4L-aTepKbQQkrAKJdocqCvtUo0al6Lo",
   authDomain: "qrder-eceb9.firebaseapp.com",
@@ -17,7 +19,9 @@ const auth = getAuth();
 const db = getFirestore(firebaseApp);
 const restaurantsCollection = collection(db,"restaurants")
 const ordersCollection = collection(db,"orders")
-export default firebaseApp.messaging()
+
+export const messaging = getMessaging(firebaseApp)
+
 export const getOrders = async () => {
   const Orders = await getDocs(ordersCollection);
   let ord = []
@@ -101,4 +105,28 @@ export const getRestaurantMenu = async(id) => {
 export const SignIn = async (email, password) => {
   const userCredential = await signInWithEmailAndPassword(auth, email, password);
   return userCredential.user;
+}
+
+export const getTokenFromFirebase = async () => {
+  getToken(messaging, { vapidKey: 'BKMetiMUvVfMeO7BY1sYllLWcTBK-sVr456aMlYjt49jmNJodpBB42GUXX8IvYSkSwk1gcx0dNBJzyxjqcJau3U' }).then((currentToken) => {
+    if (currentToken) {
+      console.log(currentToken)
+      // Send the token to your server and update the UI if necessary
+      // ...
+    } else {
+      // Show permission request UI
+      console.log('No registration token available. Request permission to generate one.');
+      // ...
+    }
+  }).catch((err) => {
+    console.log('An error occurred while retrieving token. ', err);
+    // ...
+  });
+}
+
+export const onMessageReceived = () => {
+  onMessage(messaging, (payload) => {
+    console.log('Message received. ', payload);
+    // ...
+})
 }
