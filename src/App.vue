@@ -31,37 +31,8 @@ export default {
     this.isLandscape = window.innerWidth > window.innerHeight;
     console.log('Firebase cloud messaging object', this.$messaging)
     const token = await getToken(this.$messaging,{ vapidKey: "BKMetiMUvVfMeO7BY1sYllLWcTBK-sVr456aMlYjt49jmNJodpBB42GUXX8IvYSkSwk1gcx0dNBJzyxjqcJau3U" })
-    console.log(token)
+    window.localStorage.setItem("Message_Token", token);
     // await getTokenFromFirebase()
-  },
-  async mounted() {
-    
-
-    // try {
-    //   await messaging.requestPermission();
-    // } catch (err) {
-    //   // eslint-disable-next-line no-console
-    //   console.error("Unable to get permission to notify.", err);
-    // }
-    // try {
-    //   const currentToken = await messaging.getToken();
-    //   this.fcmToken = currentToken;
-    // } catch (err) {
-    //   // eslint-disable-next-line no-console
-    //   console.error("Unable to retrieve token.", err);
-    // }
-    // const vm = this;
-    // messaging.onTokenRefresh(async () => {
-    //   try {
-    //     const refreshedToken = await messaging.getToken();
-    //     // eslint-disable-next-line no-console
-    //     console.log("Token refreshed.");
-    //     vm.fcmToken = refreshedToken;
-    //   } catch (err) {
-    //     // eslint-disable-next-line no-console
-    //     console.error("Unable to retrieve refreshed token.", err);
-    //   }
-    // });
-  },
+  }
 };
 </script>

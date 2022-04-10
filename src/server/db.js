@@ -40,7 +40,8 @@ export const addOrder = async (order) => {
     restaurantName : order.title,
     total : order.total,
     user : order.user,
-    status : 'Received'
+    status : 'Received',
+    token : order.token
   });
   order.lineItems.map(async item => {
     await addDoc(collection(db, "orders", docRef.id, 'lineItems'), {

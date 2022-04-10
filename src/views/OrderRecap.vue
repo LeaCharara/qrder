@@ -95,7 +95,8 @@ export default {
                 user : window.localStorage.getItem('userId'),
                 ...this.restaurantInfo,
                 description : this.getDescription(),
-                lineItems : this.orderDetail
+                lineItems : this.orderDetail,
+                token : window.localStorage.getItem('Message_Token')
             }
             addOrder(order)
 
