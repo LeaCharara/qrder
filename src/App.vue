@@ -25,13 +25,12 @@ export default {
     isLandscape: false,
   }),
   async created() {
-
     const user = await SignIn("leacharara@hotmail.com", "Testtest1.");
     window.localStorage.setItem("token", user.accessToken);
     window.localStorage.setItem("userId", user.uid);
     this.isLandscape = window.innerWidth > window.innerHeight;
 
-    await getTokenFromFirebase()
+    // await getTokenFromFirebase()
   },
   async mounted() {
     

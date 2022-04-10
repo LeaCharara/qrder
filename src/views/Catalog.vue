@@ -32,7 +32,7 @@
 </template>
 
 <script>
-import { getRestaurants, SignIn, messaging } from "../server/db.js";
+import { getRestaurants } from "../server/db.js";
 import RestaurantCard from "../components/RestaurantCard.vue";
 import RestaurantDescription from "../views/RestaurantDescription.vue";
 import { getToken, getMessaging, onMessage } from "firebase/messaging";

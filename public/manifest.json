@@ -24,5 +24,6 @@
   "start_url": ".",
   "display": "fullscreen",
   "background_color": "#000000",
-  "description" : "Application QRDER"
+  "description" : "Application QRDER",
+  "gcm_sender_id": "757947766402"
 }
