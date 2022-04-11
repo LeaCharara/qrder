@@ -5,12 +5,18 @@
             <v-row align="end" justify="end" class="avatar-wrapper">
                 <h1> Editting Profile: </h1>
                 <!-- <div  id="avatar" :style="avatar"></div> -->
-                <v-avatar color="lightgray" size="50vw" max max-height="300px"> 
+                <v-avatar color="lightgray" size="50vw" max max-height="300px" @click="changeAvatar"> 
                     <!-- <v-icon dark> perm_identity </v-icon>  -->
                     <img src="https://upload.wikimedia.org/wikipedia/commons/0/0c/Cow_female_black_white.jpg"> 
                 </v-avatar>
             </v-row>
              <v-col align="center">
+             <v-form 
+                class ="form"
+                v-model="isValid"
+                ref="form"
+                lazy-validation
+                >
                 <v-text-field
                     v-model="Name"
                     :rules="nameRules"
@@ -23,7 +29,6 @@
                     :rules="passwordRules"
                     :type="show ? 'text' : 'password'"
                     label="Password"
-                    required
                     @click:append="show = !show"
                 ></v-text-field> 
 
@@ -33,14 +38,12 @@
                     :rules="passwordRules"
                     :type="show1 ? 'text' : 'password'"
                     label="Confirm Password"
-                    required
                     @click:append="show1 = !show1"
                 ></v-text-field>
                 <v-text-field
                     v-model="email"
                     :rules="emailRules"
                     label="E-mail"
-                    required
                 ></v-text-field> 
 
                 <v-text-field
@@ -52,9 +55,8 @@
 
                 <v-btn
                 class="save_button"
-                :disabled="!isValid"
                 @click="save">Save</v-btn>
-                
+                </v-form>
             </v-col>
         </section>
     </div>
@@ -95,6 +97,9 @@ import { getUserInfo } from "../server/db.js";
             save() {
 
             },
+            changeAvatar(){
+                console.log("hello");
+            }
         }
     }
 </script>
@@ -119,8 +124,8 @@ import { getUserInfo } from "../server/db.js";
                 max-width: 100px;
 
                 img {
-                    object-fit: cover;
-                    object-position: center;
+                    filter: blur(3px);
+                    -webkit-filter: blur(3px);
 
                     // width: 30vw;
                     // height: 30vw;
