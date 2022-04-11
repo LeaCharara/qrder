@@ -1,7 +1,7 @@
 <template>
-  <div>
-      <br><br>
-      <b><center style="text-decoration-line: underline;">ORDER STATUS</center></b>
+  <div >
+      
+      <b><p class="top-bar" style="text-align: center;">ORDER STATUS</p></b>
     <br><br><br>
     
 
@@ -16,16 +16,16 @@
     <br><br><br><br></div>
   
 
-<p style="color:green">9:04
+<p  class="lol" style="color:green">9:04
 Your order was received</p>
 <br><br>
-<p>--:--
+<p class="lol">--:--
 Preparations are under way</p>
 <br><br>
-<p>--:--
+<p class="lol">--:--
 Final touches to perfection</p>
 <br><br>
-<p>--:--
+<p class="lol">--:--
 Anthony is serving you your order</p>
 <br><br>
 
@@ -73,7 +73,13 @@ Anthony is serving you your order</p>
   }
 </script>
 <style>
-p{
+.top-bar {
+  color: white;
+  text-align: center;
+  background-color: black;
+  display: flex;
+}
+.lol{
     margin-left: 20px;
 }
 </style>
