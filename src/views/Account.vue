@@ -3,56 +3,41 @@
     <div id="profile" >
         <section class="user-info">
             <v-row align="center" justify="center" class="avatar-wrapper">
-                <!-- <div  id="avatar" :style="avatar"></div> -->
-                <v-avatar color="lightgray" size="50vw" max max-height="300px"> 
-                    <v-icon dark> perm_identity </v-icon> 
-                    <img v-bind:src="$t(photoURL)"> 
+                <v-avatar size="50vw" max max-height="300px" @click="changeAvatar"> 
+                    <v-icon v-if="photoURL == ''" dark size="132"> mdi-account-circle </v-icon>
+                    <img v-else v-bind:src="t(photoURL)">
                 </v-avatar>
             </v-row>
             <v-col align="center">
                 <v-text-field
-                    v-bind:label="$t(name)"
+                    v-bind:label="t(name)"
                     value="John Doe"
                     solo
                     disabled
                     prepend-icon="mdi-account"
                 ></v-text-field>
-                <!-- <v-text-field
-                    label="password"
-                    v-model="password"
-                    :type="show ? 'text' : 'password'"
-                    solo
-                    disabled
-                    prepend-icon="mdi-lock"
-                ></v-text-field> -->
                 <v-text-field
-                    v-bind:label="$t(email)"
+                    v-bind:label="t(email)"
                     value="Email"
                     solo
                     disabled
                     prepend-icon="mdi-email"
                 ></v-text-field>
-                <!-- <v-text-field
-                    label="+1 111 222 3333"
-                    value="Phone Number"
-                    solo
-                    disabled
-                    prepend-icon="mdi-phone"
-                ></v-text-field> -->
                 <v-btn @click="edit">Edit Profile</v-btn>
                 <p></p>
                 <v-btn @click="logOut" class="disconnect">Disconnect</v-btn>
             </v-col>
         </section>
     </div>
-    <!-- </v-main> -->
 </template>
 
 <script>
-import { getUserInfo } from "../server/user";
-import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
-const auth = getAuth();
-let logged = false;
+    import { getUser, getUserInfo } from "../server/user";
+    import { getAuth, signOut } from "firebase/auth";
+    const auth = getAuth();
+
+
+    
     export default {
         name: "Profile",
         show: false,
@@ -64,31 +49,26 @@ let logged = false;
         }),
         
         beforeMount() {
-            onAuthStateChanged(auth, (user) => {
-            if (user) {
-                window.localStorage.setItem("userId", user.uid);
-                logged = true;
-            } else {
-                window.location.href = '/login';
-                return false;
-            }
-            });
+
         },
 
         async created() {
+            const user = await getUser();
+            if (user == null) {
+                this.$router.push({path: "/login"});
+                return false;
+            }
             await this.getInfo();
         },
 
         methods: {
             async getInfo() {
                 let userInfo = await getUserInfo();
-                if (logged)
-                     document.getElementById("profile").style.display="block";
                 this.photoURL = userInfo[0];
                 this.name = userInfo[1];
                 this.email = userInfo[2];
             },
-            $t(value) {
+            t(value) {
                 return value;
             },
             edit(){
@@ -97,7 +77,8 @@ let logged = false;
             logOut(){
                 window.localStorage.removeItem("userId");
                 signOut(auth);
-                this.$router.push({path: "/login"});
+                // this.$router.push({path: "/login"});
+                window.location.href = "/login";
             }
         }
     }

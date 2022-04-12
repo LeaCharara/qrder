@@ -8,7 +8,7 @@
       lazy-validation
     >
       <v-text-field
-        v-model="Name"
+        v-model="name"
         class="field"
         :rules="nameRules"
         label="Full Name"

@@ -51,7 +51,7 @@
 </template>
 
 <script>
-import { SignIn, ui, uiConfig } from "../server/user";
+import { getUser, SignIn, ui, uiConfig } from "../server/user";
 
 import "firebaseui/dist/firebaseui.css";
 
@@ -67,10 +67,6 @@ data: () => ({
     password: '',
     passwordRules: [
       v => !!v || 'Password is required',
-    //   v => (v && v.length >= 8) || 'Password must have 8+ characters',
-    //   v => /(?=.*[A-Z])/.test(v) || 'Must have one uppercase character', 
-    // v => /(?=.*\d)/.test(v) || 'Must have one number', 
-    // v => /([!@$%])/.test(v) || 'Must have one special character [!@#$%]'
     ],
   }),
 
@@ -90,6 +86,12 @@ data: () => ({
 
   mounted() {
       ui.start("#firebaseui-auth-container", uiConfig);
+  },
+
+  async created() {
+    let user = await getUser();
+    if (user != null) 
+        this.$router.push({path: "/profile"});
   }
 
 }

@@ -4,10 +4,9 @@
         <section class="user-info">
             <v-row align="end" justify="end" class="avatar-wrapper">
                 <h1> Editting Profile: </h1>
-                <!-- <div  id="avatar" :style="avatar"></div> -->
-                <v-avatar color="lightgray" size="50vw" max max-height="300px" @click="changeAvatar"> 
-                    <!-- <v-icon dark> perm_identity </v-icon>  -->
-                    <img v-bind:src="$t(photoURL)">
+                <v-avatar size="50vw" max max-height="300px" @click="changeAvatar"> 
+                    <v-icon v-if="photoURL == ''" dark size="112"> mdi-account-circle </v-icon>
+                    <img v-else v-bind:src="t(photoURL)">
                 </v-avatar>
             </v-row>
              <v-col align="center">
@@ -18,47 +17,52 @@
                 lazy-validation
                 >
                 <v-text-field
-                    v-model="Name"
+                    v-model="name"
                     :rules="nameRules"
                     label="Full Name"
-                    v-bind:text="$t(name)"
-                    v-bind:placeholder="$t(name)"
+                    v-bind:text="t(name)"
+                    v-bind:placeholder="t(name_old)"
                     required
                 ></v-text-field>
+
+                <v-text-field
+                    v-model="currentPassword"
+                    :append-icon="show ? 'mdi-eye' : 'mdi-eye-off'"
+                    :rules="enable ? passwordRules : ''"
+                    :type="show ? 'text' : 'password'"
+                    label="Current Password (To change the info below)"
+                    v-bind:disabled="enabled ? false : true "
+                    @click:append="show = !show"
+                ></v-text-field> 
+
+                <v-text-field
+                    v-model="email"
+                    :rules="emailRules"
+                    label="E-mail"
+                    v-bind:text="t(email)"
+                    v-bind:placeholder="t(email_old)"
+                    v-bind:disabled="currentPassword ? false : true"
+                ></v-text-field> 
+
                 <v-text-field
                     v-model="password"
-                    :append-icon="show ? 'mdi-eye' : 'mdi-eye-off'"
-                    :rules="passwordRules"
+                    :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
+                    :rules="enable ? passwordRules : ''"
                     :type="show ? 'text' : 'password'"
                     label="Password"
-                    v-bind:disabled=$b(enable)
+                    v-bind:disabled="currentPassword ? false : true"
                     @click:append="show = !show"
                 ></v-text-field> 
 
                 <v-text-field
                     v-model="confirmPassword"
-                    :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
-                    :rules="passwordRules"
+                    :append-icon="show2 ? 'mdi-eye' : 'mdi-eye-off'"
+                    :rules="enable ? passwordRules : ''"
                     :type="show1 ? 'text' : 'password'"
                     label="Confirm Password"
-                    v-bind:disabled=$b(enable)
+                    v-bind:disabled="currentPassword ? false : true"
                     @click:append="show1 = !show1"
                 ></v-text-field>
-                <v-text-field
-                    v-model="email"
-                    :rules="emailRules"
-                    label="E-mail"
-                    v-bind:text="$t(email)"
-                    v-bind:placeholder="$t(email)"
-                    v-bind:disabled=$b(enable)
-                ></v-text-field> 
-
-                <!-- <v-text-field
-                    v-model="phone"
-                    :rules="phoneRules"
-                    label="Phone number"
-                    required
-                ></v-text-field>  -->
 
                 <v-btn
                 class="save_button"
@@ -72,42 +76,40 @@
 </template>
 
 <script>
-import { getUserInfo } from "../server/user";
-import { getAuth } from "firebase/auth";
-const auth = getAuth();
-const user = auth.currentUser;
+import { getUser, editAccount, getUserInfo, reAuth } from "../server/user";
+let user;
 
     export default {
-        name: "Profile",
-        show : false,
-        show1 : false,
-        nameRules: [
-        v => !!v || 'Name is required',
-        ],
-        passwordRules: [
-        v => !!v || 'Password is required',
-        v => (v && v.length >= 8) || 'Password must have 8+ characters',
-        v => /(?=.*[A-Z])/.test(v) || 'Must have one uppercase character', 
-        v => /(?=.*\d)/.test(v) || 'Must have one number', 
-        v => /([!@$%])/.test(v) || 'Must have one special character [!@#$%]'
-        ],
-        emailRules: [
-        v => !!v || 'E-mail is required',
-        v => /.+@.+\..+/.test(v) || 'E-mail must be valid',
-        ],
-        phoneRules:[
-        v => !!v && !isNaN(parseFloat(v)) || 'Phone is required',
-        v => ( v.length = 10) || 'Phone number must have 10 digits',
-        ],
-
         data: () => ({
             photoURL: '',
+            photoURL_old: '',
             name: '',
             email: '',
-            enabled: true
+            name_old: '',
+            email_old: '',
+            enabled: true,
+
+            // form
+
+            currentPassword : '',
+            show : false,
+            show1 : false,
+            show2 : false,
+            passwordRules: [
+            v => !!v || 'Password is required',
+            v => (v && v.length >= 8) || 'Password must have 8+ characters',
+            v => /(?=.*[A-Z])/.test(v) || 'Must have one uppercase character', 
+            v => /(?=.*\d)/.test(v) || 'Must have one number', 
+            v => /([!@$%])/.test(v) || 'Must have one special character [!@#$%]'
+            ],
+            emailRules: [
+            v => !!v || 'E-mail is required',
+            v => /.+@.+\..+/.test(v) || 'E-mail must be valid',
+            ]
         }),
 
         async created() {
+            user = getUser();
             user.providerData.forEach((profile) => {
                 if(profile.providerId == "google.com")
                     this.enabled = false;
@@ -121,20 +123,36 @@ const user = auth.currentUser;
             async getInfo() {
                 let userInfo = await getUserInfo();
                 this.photoURL = userInfo[0];
-                this.name = userInfo[1];
-                this.email = userInfo[2];
+                this.name = this.name_old = userInfo[1];
+                this.email = this.email_old = userInfo[2];
             },
             changeAvatar(){
                 console.log("hello")
             },
-            $t(value) {
+            t(value) {
                 return value;
             },
-            $b(enable) {
-                if (!this.enabled) {
-                    return true;
+
+            async save() {
+                if(this.password != this.confirmPassword)
+                    return this.errorMessage = "Passwords did not match";
+                
+                const valid = await this.$refs.form.validate();
+                if(valid.valid) {
+                        const name = (this.name != "") ? this.name : this.name_old;
+                        const photoURL = (this.photoURL != "") ? this.photoURL : this.photoURL_old;
+                        let email, password = false;
+                        if (this.currentPassword) {
+                            let authed = await reAuth(this.currentPassword);
+                            if(!authed )
+                                return this.errorMessage = "Incorrect Password";
+                            email = (this.email != this.email_old) ? this.email : false;
+                            password = (this.password != "") ? this.password : false;
+                        }
+                        const editted = await editAccount(email, password, name, photoURL);
+                        if ( editted )
+                            this.$router.push({path: "/profile"});
                 }
-                return false;
             }
         }
     }
