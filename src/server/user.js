@@ -2,8 +2,37 @@ import {initializeApp} from 'firebase/app'
 import { config } from "./db";
 import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile, deleteUser } from "firebase/auth";
 
+import * as firebaseui from 'firebaseui';
+
+import { GoogleAuthProvider } from 'firebase/auth'
+
 const firebaseApp = initializeApp(config);
 const auth = getAuth();
+
+export let ui = new firebaseui.auth.AuthUI(auth);
+
+export var uiConfig = {
+    callbacks: {
+      signInSuccessWithAuthResult: function(authResult, redirectUrl) {
+        var user = authResult.user;
+        // window.localStorage.setItem("token", user.accessToken);
+        window.localStorage.setItem("userId", user.uid);
+        return true;
+      }
+    },
+    signInSuccessUrl: "/profile", // This redirect can be achived by route using callback.
+    signInFlow: "popup",
+    signInOptions: [
+                  {
+                    provider: GoogleAuthProvider.PROVIDER_ID,
+                    customParameters: {
+                      // Forces account selection even when one account
+                      // is available.
+                      prompt: 'select_account'
+                    }
+                  }
+    ]
+};
 
 export const SignIn = async (email, password) => {
     const userCredential = await signInWithEmailAndPassword(auth, email, password)

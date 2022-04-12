@@ -51,14 +51,9 @@
 </template>
 
 <script>
-import firebase from "firebase/compat/app";
-import * as firebaseui from 'firebaseui';
-import { config } from "../server/db";
-import { SignIn } from "../server/user";
+import { SignIn, ui, uiConfig } from "../server/user";
 
 import "firebaseui/dist/firebaseui.css";
-
-firebase.initializeApp(config);
 
 export default {
 data: () => ({
@@ -90,43 +85,11 @@ data: () => ({
           this.$router.push({path: "/profile"});
         }  
       }
-    },
-    create (){
-        
     }
   },
 
   mounted() {
-    let ui = firebaseui.auth.AuthUI.getInstance();
-    if (!ui) {
-        ui = new firebaseui.auth.AuthUI(firebase.auth());
-    }
-    var uiConfig = {
-        callbacks: {
-          signInSuccessWithAuthResult: function(authResult, redirectUrl) {
-            var user = authResult.user;
-            // window.localStorage.setItem("token", user.accessToken);
-            window.localStorage.setItem("userId", user.uid);
-            return true;
-          }
-        },
-        signInSuccessUrl: "/profile", // This redirect can be achived by route using callback.
-        signInFlow: "popup",
-        signInOptions: [
-                      // firebase.auth.EmailAuthProvider.PROVIDER_ID,
-                      {
-                        provider: firebase.auth.GoogleAuthProvider.PROVIDER_ID,
-                        customParameters: {
-                          // Forces account selection even when one account
-                          // is available.
-                          prompt: 'select_account'
-                        }
-                      }
-        ]
-    };
-    // if (ui.isPendingRedirect()) {
       ui.start("#firebaseui-auth-container", uiConfig);
-    // }
   }
 
 }
