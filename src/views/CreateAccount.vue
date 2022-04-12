@@ -11,18 +11,18 @@
         v-model="Name"
         class="field"
         :rules="nameRules"
-        label="Name"
-        required
-      ></v-text-field>
-
-      <v-text-field
-        v-model="LastName"
-        class="field"
-        :rules="nameRules"
-        label="LastName"
+        label="Full Name"
         required
       ></v-text-field>
   
+      <v-text-field
+        v-model="email"
+        class="field"
+        :rules="emailRules"
+        label="E-mail"
+        required
+      ></v-text-field> 
+
       <v-text-field
         v-model="password"
         class="field"
@@ -45,21 +45,13 @@
         @click:append="show1 = !show1"
       ></v-text-field>
 
-      <v-text-field
-        v-model="email"
-        class="field"
-        :rules="emailRules"
-        label="E-mail"
-        required
-      ></v-text-field> 
-
-      <v-text-field
+      <!-- <v-text-field
         v-model="phone"
         class="field"
         :rules="phoneRules"
         label="Phone number"
         required
-      ></v-text-field> 
+      ></v-text-field>  -->
 
       <div class="red--text"> {{errorMessage}}</div>
 
@@ -77,14 +69,16 @@
 </template>
 
 <script>
+import { CreateAccount } from "../server/db.js";
+
 export default {
 data: () => ({
     isValid: true,
     name: '',
+    email:'',
     password:'',
     confirmPassword:'',
-    phone:'',
-    email:'',
+    // phone:'',
     errorMessage: "",
     show: false,
     show1: false,
@@ -109,12 +103,18 @@ data: () => ({
   }),
 
   methods: {
-    validate () {
-        if(this.password == this.confirmPassword){
-            this.$refs.form.validate()
-        }else {
-         this.errorMessage = "Password did not match"
-       }
+    async validate () {
+        if(this.password != this.confirmPassword)
+            return this.errorMessage = "Passwords did not match";
+        
+        const valid = await this.$refs.form.validate();
+        if(valid.valid) {
+          const user = await CreateAccount(this.email, this.password, this.name);
+          if (user) {
+            window.localStorage.setItem("userId", user.uid);
+            this.$router.push({path: "/profile"});
+          }  
+        }
     },
   },
 }

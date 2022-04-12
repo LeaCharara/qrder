@@ -1,6 +1,7 @@
 import {initializeApp} from 'firebase/app'
 import { getFirestore,collection,doc, getDocs,getDoc, addDoc } from "firebase/firestore";
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile, deleteUser } from "firebase/auth";
+import { async } from '@firebase/util';
 
 export const config = { 
   apiKey: "AIzaSyBc4L-aTepKbQQkrAKJdocqCvtUo0al6Lo",
@@ -101,8 +102,49 @@ export const getRestaurantMenu = async(id) => {
 }
 
 export const SignIn = async (email, password) => {
-  const userCredential = await signInWithEmailAndPassword(auth, email, password);
+  const userCredential = await signInWithEmailAndPassword(auth, email, password)
+  .catch(function(error) {
+    alert("Invalid email or password.");
+    return false;
+  });
   return userCredential.user;
+}
+
+export const CreateAccount = async (email, password, fullname) => {
+  const userCredential = await createUserWithEmailAndPassword(auth, email, password)
+  .catch(function(error) {
+    var errorCode = error.code;
+    if (errorCode == 'auth/email-already-in-use') {
+      alert('This email is already in use! please Try another one.');
+    } else if (errorCode == "auth/invalid-email") {
+      alert('Invalid Email Address!');
+    } else
+      // alert("Unexpected Error Occured! Please check db.js:CreateAccount");
+      alert(errorCode);
+    return false;
+  });
+
+  updateProfile(auth.currentUser, {
+    displayName: fullname
+  }).catch((error) => {
+    deleteUser(userCredential.user);
+    alert("Unexpected Error Occured! Please check db.js:CreateAccount");
+    return false;
+  });
+
+  return userCredential.user;
+}
+
+export const getUserInfo = async () => {
+  const user = auth.currentUser;
+  if (user !== null) {
+    const photoURL = user.photoURL;
+    const displayName = user.displayName;
+    const email = user.email;
+
+    return [photoURL, displayName, email];
+  }
+  return false;
 }
 
 // export const getTokenFromFirebase = async () => {

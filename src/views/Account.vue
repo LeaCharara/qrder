@@ -1,17 +1,17 @@
 <template>
     <!-- <v-main>  -->
-    <div class="profile">
+    <div id="profile" >
         <section class="user-info">
             <v-row align="center" justify="center" class="avatar-wrapper">
                 <!-- <div  id="avatar" :style="avatar"></div> -->
                 <v-avatar color="lightgray" size="50vw" max max-height="300px"> 
                     <v-icon dark> perm_identity </v-icon> 
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/0/0c/Cow_female_black_white.jpg"> 
+                    <img v-bind:src="$t(photoURL)"> 
                 </v-avatar>
             </v-row>
             <v-col align="center">
                 <v-text-field
-                    label="John Doe"
+                    v-bind:label="$t(name)"
                     value="John Doe"
                     solo
                     disabled
@@ -26,22 +26,22 @@
                     prepend-icon="mdi-lock"
                 ></v-text-field>
                 <v-text-field
-                    label="abcde@homtail.com"
+                    v-bind:label="$t(email)"
                     value="Email"
                     solo
                     disabled
                     prepend-icon="mdi-email"
                 ></v-text-field>
-                <v-text-field
+                <!-- <v-text-field
                     label="+1 111 222 3333"
                     value="Phone Number"
                     solo
                     disabled
                     prepend-icon="mdi-phone"
-                ></v-text-field>
+                ></v-text-field> -->
                 <v-btn @click="edit">Edit Profile</v-btn>
                 <p></p>
-                <v-btn @click="deleteAcc" class="disconnect">Disconnect</v-btn>
+                <v-btn @click="logOut" class="disconnect">Disconnect</v-btn>
             </v-col>
         </section>
     </div>
@@ -50,29 +50,61 @@
 
 <script>
 import { getUserInfo } from "../server/db.js";
+import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
+const auth = getAuth();
+let logged = false;
     export default {
         name: "Profile",
         show: false,
         
-        computed: {
-            avatar () {
-                // return "background-image: url('" + this.user.src + "');";
+        data: () => ({
+            photoURL: '',
+            name: '',
+            email: ''
+        }),
+        
+        beforeMount() {
+            onAuthStateChanged(auth, (user) => {
+            if (user) {
+                window.localStorage.setItem("userId", user.uid);
+                logged = true;
+            } else {
+                window.location.href = '/login';
+                return false;
             }
+            });
+        },
+
+        async created() {
+            await this.getInfo();
         },
 
         methods: {
-            edit(){
-                this.$router.push({path: "/profile/edit"})
+            async getInfo() {
+                let userInfo = await getUserInfo();
+                if (logged)
+                     document.getElementById("profile").style.display="block";
+                this.photoURL = userInfo[0];
+                this.name = userInfo[1];
+                this.email = userInfo[2];
             },
-            deleteAcc(){
-                
+            $t(value) {
+                return value;
+            },
+            edit(){
+                this.$router.push({path: "/profile/edit"});
+            },
+            logOut(){
+                window.localStorage.removeItem("userId");
+                signOut(auth);
+                this.$router.push({path: "/login"});
             }
         }
     }
 </script>
 
 <style lang="scss">
-    .profile {
+    #profile {
         
         .v-text-field{
             padding : 0;
