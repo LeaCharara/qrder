@@ -69,7 +69,7 @@
 </template>
 
 <script>
-import { CreateAccount } from "../server/db.js";
+import { CreateAccount } from "../server/user";
 
 export default {
 data: () => ({

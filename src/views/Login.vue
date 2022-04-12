@@ -53,15 +53,12 @@
 <script>
 import firebase from "firebase/compat/app";
 import * as firebaseui from 'firebaseui';
-import { config } from "../server/db.js";
-
-// import { login } from "../server/db.js";
+import { config } from "../server/db";
+import { SignIn } from "../server/user";
 
 import "firebaseui/dist/firebaseui.css";
 
 firebase.initializeApp(config);
-
-import { SignIn } from "../server/db.js";
 
 export default {
 data: () => ({

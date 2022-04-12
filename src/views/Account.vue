@@ -49,7 +49,7 @@
 </template>
 
 <script>
-import { getUserInfo } from "../server/db.js";
+import { getUserInfo } from "../server/user";
 import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
 const auth = getAuth();
 let logged = false;
