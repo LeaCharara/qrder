@@ -125,7 +125,7 @@ const user = auth.currentUser;
                 this.email = userInfo[2];
             },
             changeAvatar(){
-                console.log("hello");
+                console.log("hello")
             },
             $t(value) {
                 return value;
@@ -160,8 +160,8 @@ const user = auth.currentUser;
                 max-width: 100px;
 
                 img {
-                    filter: blur(3px);
-                    -webkit-filter: blur(3px);
+                    filter: blur(2px);
+                    -webkit-filter: blur(2px);
 
                     // width: 30vw;
                     // height: 30vw;
@@ -198,5 +198,5 @@ const user = auth.currentUser;
                     border-left: solid thin black;
                 }
     
-    }
+        }
 </style>

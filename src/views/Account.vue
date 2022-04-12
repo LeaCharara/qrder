@@ -17,14 +17,14 @@
                     disabled
                     prepend-icon="mdi-account"
                 ></v-text-field>
-                <v-text-field
+                <!-- <v-text-field
                     label="password"
                     v-model="password"
                     :type="show ? 'text' : 'password'"
                     solo
                     disabled
                     prepend-icon="mdi-lock"
-                ></v-text-field>
+                ></v-text-field> -->
                 <v-text-field
                     v-bind:label="$t(email)"
                     value="Email"
