@@ -1,15 +1,16 @@
 <template>
-    <!-- <v-main>  -->
     <div id="profile" class="edit">
-        <section class="user-info">
+        <v-col>
             <v-row align="end" justify="end" class="avatar-wrapper">
                 <h1> Editting Profile: </h1>
                 <v-avatar size="50vw" max max-height="300px" @click="changeAvatar"> 
                     <v-icon v-if="photoURL == ''" dark size="112"> mdi-account-circle </v-icon>
                     <img v-else v-bind:src="t(photoURL)">
+                    <v-icon size="60">mdi-lead-pencil</v-icon>
                 </v-avatar>
             </v-row>
-             <v-col align="center">
+            </v-col>
+             <v-col align="center" padding="0">
              <v-form 
                 class ="form"
                 v-model="isValid"
@@ -30,7 +31,7 @@
                     :append-icon="show ? 'mdi-eye' : 'mdi-eye-off'"
                     :rules="enable ? passwordRules : ''"
                     :type="show ? 'text' : 'password'"
-                    label="Current Password (To change the info below)"
+                    label="Current Password"
                     v-bind:disabled="enabled ? false : true "
                     @click:append="show = !show"
                 ></v-text-field> 
@@ -49,20 +50,23 @@
                     :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
                     :rules="enable ? passwordRules : ''"
                     :type="show ? 'text' : 'password'"
-                    label="Password"
+                    label="New Password"
                     v-bind:disabled="currentPassword ? false : true"
                     @click:append="show = !show"
                 ></v-text-field> 
+            
 
                 <v-text-field
                     v-model="confirmPassword"
                     :append-icon="show2 ? 'mdi-eye' : 'mdi-eye-off'"
                     :rules="enable ? passwordRules : ''"
                     :type="show1 ? 'text' : 'password'"
-                    label="Confirm Password"
+                    label="Confirm New Password"
                     v-bind:disabled="currentPassword ? false : true"
                     @click:append="show1 = !show1"
                 ></v-text-field>
+
+                 <p>Password must have 8+ characters, one uppercase character, one number and one special character.</p>
 
                 <v-btn
                 class="save_button"
@@ -70,9 +74,7 @@
                 @click="save">Save</v-btn>
                 </v-form>
             </v-col>
-        </section>
     </div>
-    <!-- </v-main> -->
 </template>
 
 <script>
@@ -100,7 +102,7 @@ let user;
             v => (v && v.length >= 8) || 'Password must have 8+ characters',
             v => /(?=.*[A-Z])/.test(v) || 'Must have one uppercase character', 
             v => /(?=.*\d)/.test(v) || 'Must have one number', 
-            v => /([!@$%])/.test(v) || 'Must have one special character [!@#$%]'
+            v => /([?.!@$%])/.test(v) || 'Must have one special character [?.!@#$%]'
             ],
             emailRules: [
             v => !!v || 'E-mail is required',
@@ -162,15 +164,19 @@ let user;
     #profile {
         &.edit {
             .avatar-wrapper {
-                padding: 10% 15%;
-
+                padding: 5% 10%;
                 position: relative;
 
                 h1 {
                     position: absolute;
                     top: 20%;
-                    left: 5%;
+                    left: 15%;
+                    font-size : 25px;
                 }
+            }
+            .v-icon{
+                position: absolute;
+                width : 50%;
             }
 
             .v-avatar {
@@ -180,12 +186,6 @@ let user;
                 img {
                     filter: blur(2px);
                     -webkit-filter: blur(2px);
-
-                    // width: 30vw;
-                    // height: 30vw;
-
-                    // max-height: 200px;
-                    // max-width: 200px;
 
                     width: 100%;
                     height: 100%;
@@ -198,6 +198,10 @@ let user;
 
                 max-height: 200px;
                 max-width: 200px;
+            }
+            p{
+                font-size : 10px;
+                padding : 0% 10%;
             }
 
             .name {
