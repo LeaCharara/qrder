@@ -44,6 +44,7 @@
         required
         @click:append="show1 = !show1"
       ></v-text-field>
+      <p>Password must have 8+ characters, one uppercase character, one number and one special character.</p>
 
       <!-- <v-text-field
         v-model="phone"
@@ -90,7 +91,7 @@ data: () => ({
       v => (v && v.length >= 8) || 'Password must have 8+ characters',
       v => /(?=.*[A-Z])/.test(v) || 'Must have one uppercase character', 
       v => /(?=.*\d)/.test(v) || 'Must have one number', 
-      v => /([!@$%])/.test(v) || 'Must have one special character [!@#$%]'
+      v => /([.?!@$%])/.test(v) || 'Must have one special character [!@#$%]'
     ],
     emailRules: [
       v => !!v || 'E-mail is required',
@@ -131,11 +132,17 @@ padding : 5%;
 .v-input__details{
   margin-bottom : 0;
 }
+p{
+font-size : 10px;
+padding : 0% 10%;
+text-align : center;
+}
 .create-btn{
   color : white;
   background-color : black;
   margin-left: 65%;
   margin-bottom : 10%;
+  margin-top : 10%;
 }
 
 </style>
