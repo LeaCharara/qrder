@@ -89,7 +89,7 @@ export default {
             console.log(this.tax + this.subtotal)
             this.total = (this.tax + this.subtotal).toFixed(1)
         },
-        placeOrder (){
+        async placeOrder (){
             const order = {
                 total : this.total,
                 user : window.localStorage.getItem('userId'),
@@ -98,7 +98,8 @@ export default {
                 lineItems : this.orderDetail,
                 token : window.localStorage.getItem('Message_Token')
             }
-            addOrder(order)
+            const id = await addOrder(order);
+            this.$router.push({ name: "status", params: { id: id } })
 
         },
         getDescription () {

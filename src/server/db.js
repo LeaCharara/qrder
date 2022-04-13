@@ -16,7 +16,7 @@ export const config = {
 
 const firebaseApp = initializeApp(config);
 const auth = getAuth();
-const db = getFirestore(firebaseApp);
+export const db = getFirestore(firebaseApp);
 const restaurantsCollection = collection(db,"restaurants")
 const ordersCollection = collection(db,"orders")
 
@@ -50,6 +50,7 @@ export const addOrder = async (order) => {
       quantity : item.quantity
     })
   })
+  return docRef.id;
 }
 
 export const getRestaurants = async () => {
