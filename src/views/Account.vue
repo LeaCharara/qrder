@@ -1,14 +1,13 @@
 <template>
-    <!-- <v-main>  -->
     <div id="profile" >
-        <section class="user-info">
+        <v-col align="center">
             <v-row align="center" justify="center" class="avatar-wrapper">
                 <v-avatar size="50vw" max max-height="300px" @click="changeAvatar"> 
                     <v-icon v-if="photoURL == ''" dark size="132"> mdi-account-circle </v-icon>
                     <img v-else v-bind:src="t(photoURL)">
                 </v-avatar>
             </v-row>
-            <v-col align="center">
+            
                 <v-text-field
                     v-bind:label="t(name)"
                     value="John Doe"
@@ -27,7 +26,6 @@
                 <p></p>
                 <v-btn @click="logOut" class="disconnect">Disconnect</v-btn>
             </v-col>
-        </section>
     </div>
 </template>
 
