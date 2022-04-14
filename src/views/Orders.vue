@@ -1,7 +1,7 @@
 <template>
   <v-list>
     <v-list-item v-for="(o, index) in sortedOrders" :key="index">
-      <v-list-item-content class="order">
+      <div class="order">
           <v-card
           class="order-card"
           :elevation="1"
@@ -10,7 +10,7 @@
         >
           <OrderCard :order="o" />
         </v-card>
-      </v-list-item-content>
+      </div>
     </v-list-item>
   </v-list>
 </template>

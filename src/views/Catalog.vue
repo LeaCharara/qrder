@@ -1,9 +1,22 @@
 <template>
   <div v-if="isLandscape && this.$vuetify.display.mdAndUp">
     <v-navigation-drawer permanent left app style="width: 40% !important">
+      <v-card>
+        <v-text-field
+          @keyup="searchRestaurant"
+          placeholder="Search"
+          v-model="search"
+        ></v-text-field>
+        <v-tabs center-active show-arrows>
+          <v-tab @click="chosenType = 'All'">All</v-tab>
+          <v-tab v-for="type in types" :key="type" @click="chosenType = type">{{
+            type
+          }}</v-tab>
+        </v-tabs>
+      </v-card>
       <v-list>
         <v-list-item
-          v-for="(r, index) in restaurants"
+          v-for="(r, index) in filteredRestaurants"
           :key="index"
           @click="showinfo(r.id)"
         >
@@ -19,9 +32,18 @@
     </v-main>
   </div>
   <v-main v-else>
+    <v-text-field placeholder="Search" v-model="search">Search</v-text-field>
+    <v-card>
+      <v-tabs center-active show-arrows>
+        <v-tab @click="chosenType = 'All'">All</v-tab>
+        <v-tab v-for="type in types" :key="type" @click="chosenType = type">{{
+          type
+        }}</v-tab>
+      </v-tabs>
+    </v-card>
     <v-list>
       <v-list-item
-        v-for="(r, index) in restaurants"
+        v-for="(r, index) in filteredRestaurants"
         :key="index"
         @click="showinfo(r.id)"
       >
@@ -35,7 +57,6 @@
 import { getRestaurants } from "../server/db.js";
 import RestaurantCard from "../components/RestaurantCard.vue";
 import RestaurantDescription from "../views/RestaurantDescription.vue";
-import { getToken, getMessaging, onMessage } from "firebase/messaging";
 export default {
   name: "Catalog",
   components: {
@@ -50,19 +71,25 @@ export default {
   },
   data: () => ({
     restaurants: [],
+    filteredRestaurants: [],
     chosenRestaurantId: "",
     isLandscape: false,
+    search: "",
+    types: [],
+    chosenType: "All",
   }),
   methods: {
     async getAllRestaurants() {
       this.restaurants = await getRestaurants();
       this.restaurants.map((r) => {
+        if (!this.types.includes(r.type)) this.types.push(r.type);
         let dollars = "";
         for (let i = 0; i < r.priceLevel; i++) {
           dollars += "$";
         }
         r.priceLevel = dollars;
       });
+      this.filteredRestaurants = [...this.restaurants];
     },
     showinfo(id) {
       if (this.isLandscape && this.$vuetify.display.mdAndUp) {
@@ -74,46 +101,30 @@ export default {
     onScreenResize() {
       this.isLandscape = window.innerWidth > window.innerHeight;
     },
-    async activate() {
-      getToken(messaging, {
-        vapidKey:
-          "BKMetiMUvVfMeO7BY1sYllLWcTBK-sVr456aMlYjt49jmNJodpBB42GUXX8IvYSkSwk1gcx0dNBJzyxjqcJau3U",
-      })
-        .then((currentToken) => {
-          if (currentToken) {
-            console.log(currentToken);
-            // Send the token to your server and update the UI if necessary
-            // ...
-          } else {
-            // Show permission request UI
-            console.log(
-              "No registration token available. Request permission to generate one."
-            );
-            // ...
-          }
-        })
-        .catch((err) => {
-          console.log("An error occurred while retrieving token. ", err);
-          // ...
-        });
-      if (token) console.log(token);
-      else console.log("Did not work");
+    searchRestaurant() {
+      this.filteredRestaurants = this.restaurants.filter((r) => {
+        return r.title.toLowerCase().includes(this.search.toLowerCase());
+      });
+    },
+  },
+  watch: {
+    chosenType(value) {
+      if (value === "All") this.filteredRestaurants = [...this.restaurants];
+      else
+        this.filteredRestaurants = this.restaurants.filter(
+          (r) => r.type === value
+        );
     },
   },
   mounted() {
     this.$nextTick(() => {
       window.addEventListener("resize", this.onScreenResize);
     });
-    const messaging = getMessaging();
-    onMessage(messaging, (payload) => {
-      console.log(payload);
-    });
   },
   unmounted() {
     window.removeEventListener("resize", this.onScreenResize);
   },
   async created() {
-    
     await this.getAllRestaurants();
     if (this.BackchosenRestaurantId.length === 0)
       this.chosenRestaurantId = this.restaurants[0].id;

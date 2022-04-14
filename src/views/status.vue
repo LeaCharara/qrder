@@ -33,6 +33,9 @@
       order
     </p>
     <br /><br />
+    <p class="lol" :style="status === 'Done' ? 'color:green' : ''">
+      {{ timestamps[4] ? timestamps[4] : "--:--" }} Your order has been served
+    </p>
   </div>
 </template>
 
@@ -61,7 +64,7 @@ export default {
           ).padStart(2, "0")}`
         );
         this.status = doc.data().status;
-        this.value = 25 * (this.statuses.indexOf(this.status) + 1);
+        this.value = 20 * (this.statuses.indexOf(this.status) + 1);
       }
     );
   },

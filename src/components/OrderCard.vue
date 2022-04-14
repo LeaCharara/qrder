@@ -17,7 +17,7 @@
           </v-list-item-subtitle>
         </v-col>
         <v-col sm="3" align-self="center">
-            <div v-if="order.status === 'Serving' " class="text-center align">
+            <div v-if="order.status === 'Done' " class="text-center align">
                 <v-btn
                 rounded
                 color="normal"
