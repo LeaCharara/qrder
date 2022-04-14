@@ -13,13 +13,11 @@
              <v-col align="center" padding="0">
              <v-form 
                 class ="form"
-                v-model="isValid"
                 ref="form"
                 lazy-validation
                 >
                 <v-text-field
                     v-model="name"
-                    :rules="nameRules"
                     label="Full Name"
                     v-bind:text="t(name)"
                     v-bind:placeholder="t(name_old)"
@@ -29,7 +27,7 @@
                 <v-text-field
                     v-model="currentPassword"
                     :append-icon="show ? 'mdi-eye' : 'mdi-eye-off'"
-                    :rules="enable ? passwordRules : ''"
+                    :rules="enabled ? passwordRules : ''"
                     :type="show ? 'text' : 'password'"
                     label="Current Password"
                     v-bind:disabled="enabled ? false : true "
@@ -48,25 +46,26 @@
                 <v-text-field
                     v-model="password"
                     :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
-                    :rules="enable ? passwordRules : ''"
+                    :rules="enabled && password ? passwordRules : ''"
                     :type="show ? 'text' : 'password'"
                     label="New Password"
                     v-bind:disabled="currentPassword ? false : true"
-                    @click:append="show = !show"
+                    @click:append="show1 = !show"
                 ></v-text-field> 
             
 
                 <v-text-field
                     v-model="confirmPassword"
                     :append-icon="show2 ? 'mdi-eye' : 'mdi-eye-off'"
-                    :rules="enable ? passwordRules : ''"
+                    :rules="enabled ? passwordRules && password : ''"
                     :type="show1 ? 'text' : 'password'"
                     label="Confirm New Password"
-                    v-bind:disabled="currentPassword ? false : true"
-                    @click:append="show1 = !show1"
+                    v-bind:disabled="currentPassword && password ? false : true"
+                    @click:append="show2 = !show1"
                 ></v-text-field>
 
-                 <p>Password must have 8+ characters, one uppercase character, one number and one special character.</p>
+                <p>Password must have 8+ characters, one uppercase character, one number and one special character.</p>
+                <div class="red--text"> {{errorMessage}}</div>
 
                 <v-btn
                 class="save_button"
@@ -92,17 +91,18 @@ let user;
             enabled: true,
 
             // form
-
+            errorMessage: "",
             currentPassword : '',
+            password: '',
+            confirmPassword: '',
             show : false,
             show1 : false,
             show2 : false,
             passwordRules: [
-            v => !!v || 'Password is required',
-            v => (v && v.length >= 8) || 'Password must have 8+ characters',
-            v => /(?=.*[A-Z])/.test(v) || 'Must have one uppercase character', 
-            v => /(?=.*\d)/.test(v) || 'Must have one number', 
-            v => /([?.!@$%])/.test(v) || 'Must have one special character [?.!@#$%]'
+                v => (v && v.length >= 8) || 'Password must have 8+ characters',
+                v => /(?=.*[A-Z])/.test(v) || 'Must have one uppercase character', 
+                v => /(?=.*\d)/.test(v) || 'Must have one number', 
+                v => /([?.!@$%])/.test(v) || 'Must have one special character [?.!@#$%]'
             ],
             emailRules: [
             v => !!v || 'E-mail is required',
@@ -135,10 +135,7 @@ let user;
                 return value;
             },
 
-            async save() {
-                if(this.password != this.confirmPassword)
-                    return this.errorMessage = "Passwords did not match";
-                
+            async save() {            
                 const valid = await this.$refs.form.validate();
                 if(valid.valid) {
                         const name = (this.name != "") ? this.name : this.name_old;
@@ -148,6 +145,8 @@ let user;
                             let authed = await reAuth(this.currentPassword);
                             if(!authed )
                                 return this.errorMessage = "Incorrect Password";
+                            if(this.password != this.confirmPassword)
+                                return this.errorMessage = "Passwords do not match";
                             email = (this.email != this.email_old) ? this.email : false;
                             password = (this.password != "") ? this.password : false;
                         }
@@ -215,14 +214,18 @@ let user;
                     background-color: unset;
                 }
             }
-        }
 
-        .save_button {
-                    width: 50vw;
-                    color : white;
-                    background-color : black;
-                    border-left: solid thin black;
-                }
-    
+            .red--text {
+                color: red;
+            }
+
+            .save_button {
+                width: 50vw;
+                color : white;
+                background-color : black;
+                border-left: solid thin black;
+            }
         }
+    
+    }
 </style>
