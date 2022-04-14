@@ -1,5 +1,5 @@
 import {initializeApp} from 'firebase/app'
-import { getFirestore,collection,doc, getDocs,getDoc, addDoc } from "firebase/firestore";
+import { getFirestore,collection,doc, getDocs,getDoc, addDoc, query, where } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 import { async } from '@firebase/util';
 
@@ -20,8 +20,9 @@ export const db = getFirestore(firebaseApp);
 const restaurantsCollection = collection(db,"restaurants")
 const ordersCollection = collection(db,"orders")
 
-export const getOrders = async () => {
-  const Orders = await getDocs(ordersCollection);
+export const getOrders = async (id) => {
+  const q = query(ordersCollection, where('user','==',id))
+  const Orders = await getDocs(q);
   let ord = []
   Orders.forEach((doc) => {
     ord.push({

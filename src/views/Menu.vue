@@ -1,4 +1,5 @@
 <template>
+
   <div class="top-bar">
     <v-icon v-if="!fromPageScan" @click="Back" style="margin-right: 20px"
       >mdi-arrow-left-thick</v-icon
@@ -37,13 +38,17 @@ export default {
     },
     isLandscape : {
       type : String,
-      default : false
+      default : 'false'
     },
     fromPageScan : {
       type : Boolean,
-      default : false
-    }
+      default : 'false'
     },
+    orderRecapItems : {
+      type : String,
+      default : ""
+    }
+  },
   components: {
     MenuItemCard,
   },
@@ -62,6 +67,13 @@ export default {
       this.menu.title = restaurant.title;
       const menu = await getRestaurantMenu(this.id);
       this.menu.menu_types = menu;
+      if(this.orderRecapItems){
+        this.orderedItem = JSON.parse(this.orderRecapItems)
+      
+      this.orderedItem.map(item => {
+        const index = this.menu.menu_types[item.type].menu_items.findIndex(i => i.name === item.name);
+        this.menu.menu_types[item.type].menu_items[index].quantity = item.quantity
+      })}
     },
     Back() {
       if (this.isLandscape && this.$vuetify.display.mdAndUp) {
@@ -83,6 +95,8 @@ export default {
   },
   async created() {
     await this.getMenu();
+    
+    
   },
 };
 </script>

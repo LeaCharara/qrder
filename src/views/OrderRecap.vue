@@ -99,7 +99,7 @@ export default {
                 token : window.localStorage.getItem('Message_Token')
             }
             const id = await addOrder(order);
-            this.$router.push({ name: "status", params: { id: id } })
+            this.$router.push({ name: "status", params: { id: id, restaurantName : this.restaurantInfo.title } })
 
         },
         getDescription () {
@@ -111,7 +111,10 @@ export default {
                     description += item.name
             })
             return description;
-        }
+        },
+        Back() {
+            this.$router.push({name: "menu", params : { id: this.restaurantInfo.id, orderRecapItems : JSON.stringify(this.orderDetail)}})
+        }   
     },
     created () {
         this.orderDetail = JSON.parse(this.order)

@@ -48,7 +48,8 @@ export default {
   }),
   methods: {
     async getAllOrders() {
-      this.orders = await getOrders(this.id);
+      this.orders = await getOrders(window.localStorage.getItem('userId'));
+      console.log(this.orders)
     },
   },
   async created() {

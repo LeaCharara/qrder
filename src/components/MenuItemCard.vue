@@ -60,16 +60,16 @@ export default {
   methods: {
     add(){
       this.currentItem.quantity = this.currentItem.quantity + 1;
-      this.$emit('updateQuantity',{id : this.currentItem.id, quantity : this.currentItem.quantity, name: this.currentItem.name, price: this.currentItem.price})
+      this.$emit('updateQuantity',{id : this.currentItem.id, quantity : this.currentItem.quantity, name: this.currentItem.name, price: this.currentItem.price, type : this.currentItem.type})
     },
     substract(){
       this.currentItem.quantity > 0 ? this.currentItem.quantity = this.currentItem.quantity - 1 : this.currentItem.quantity = 0;
-      this.$emit('updateQuantity',{id : this.currentItem.id, quantity : this.currentItem.quantity, name: this.currentItem.name, price: this.currentItem.price})
+      this.$emit('updateQuantity',{id : this.currentItem.id, quantity : this.currentItem.quantity, name: this.currentItem.name, price: this.currentItem.price, type : this.currentItem.type})
     }
   },
   created () {
     this.currentItem = {...this.item}
-    this.currentItem.quantity = 0;
+    if(!this.item.quantity) this.currentItem.quantity = 0;
   },
 };
 </script>

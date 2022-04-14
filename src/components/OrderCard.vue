@@ -17,13 +17,23 @@
           </v-list-item-subtitle>
         </v-col>
         <v-col sm="3" align-self="center">
-            <div class="text-center align">
+            <div v-if="order.status === 'Serving' " class="text-center align">
                 <v-btn
                 rounded
                 color="normal"
                 dark
                 >
                 Details
+                </v-btn>
+            </div>
+            <div v-else class="text-center align">
+                <v-btn
+                rounded
+                color="normal"
+                dark
+                @click="TrackOrder"
+                >
+                Track
                 </v-btn>
             </div>
         </v-col>
@@ -48,6 +58,11 @@ export default {
            return moment(String(date)).format('MMM Do')
           }
       },
+      TrackOrder(){
+        console.log(this.order)
+        this.$router.push({ name: "status", params: { id: this.order.id, restaurantName : this.order.restaurantName } })
+
+      }
   },
   data() {
     return{
