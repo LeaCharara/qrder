@@ -1,6 +1,6 @@
 <template>
   <v-card :elevation="5" outlined class="resto-card">
-    <v-img width="100%" :src="r.img"></v-img>
+    <v-img width="100%" :src="r.img" transition="false"></v-img>
     <v-col style="padding-left: 20px; padding-right: 20px">
       <v-row>
         <v-col>
@@ -53,5 +53,9 @@ h2{
 }
 .description {
   margin-bottom: 20px;
+}
+.fade-enter-from,
+.fade-leave-to {
+    opacity: 1;
 }
 </style>
