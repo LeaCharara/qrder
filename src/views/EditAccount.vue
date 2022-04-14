@@ -3,10 +3,10 @@
         <v-col>
             <v-row align="end" justify="end" class="avatar-wrapper">
                 <h1> Editting Profile: </h1>
-                <v-avatar size="50vw" max max-height="300px" @click="changeAvatar"> 
-                    <v-icon v-if="photoURL == ''" dark size="112"> mdi-account-circle </v-icon>
+                <v-avatar id="avatar" size="50vw" max max-height="300px" @click="changeAvatar"> 
+                    <v-icon v-if="photoURL == '' || photoURL == null" color="grey" size="112"> mdi-account-circle </v-icon>
                     <img v-else v-bind:src="t(photoURL)">
-                    <v-icon size="60">mdi-lead-pencil</v-icon>
+                    <v-icon size="30" color="white">mdi-lead-pencil</v-icon>
                 </v-avatar>
             </v-row>
             </v-col>
@@ -193,11 +193,15 @@ let user;
             }
 
             #avatar {
-                width: 30vw;
-                height: 30vw;
+                // width: 30vw;
+                // height: 30vw;
 
-                max-height: 200px;
-                max-width: 200px;
+                // max-height: 200px;
+                // max-width: 200px;
+
+                i:last-of-type::before {
+                    text-shadow: 0 0 2px black;
+                }
             }
             p{
                 font-size : 10px;

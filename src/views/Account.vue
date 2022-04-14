@@ -3,7 +3,7 @@
         <v-col align="center">
             <v-row align="center" justify="center" class="avatar-wrapper">
                 <v-avatar size="50vw" max max-height="300px" @click="changeAvatar"> 
-                    <v-icon v-if="photoURL == ''" dark size="132"> mdi-account-circle </v-icon>
+                    <v-icon v-if="photoURL == '' || photoURL == null" dark size="132"> mdi-account-circle </v-icon>
                     <img v-else v-bind:src="t(photoURL)">
                 </v-avatar>
             </v-row>
