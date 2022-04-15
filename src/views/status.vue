@@ -48,7 +48,7 @@ export default {
     return {
       value: 25,
       status: "Received",
-      statuses: ["Received", "Preparing", "Ready to be served", "Serving"],
+      statuses: ["Received", "Preparing", "Ready to be served", "Serving", "Done"],
       timestamps: [],
     };
   },
@@ -58,12 +58,15 @@ export default {
       { includeMetadataChanges: true },
       (doc) => {
         let currentTime = new Date();
-        this.timestamps.push(
-          `${currentTime.getHours()}:${String(
-            currentTime.getMinutes()
-          ).padStart(2, "0")}`
-        );
         this.status = doc.data().status;
+        const index = this.statuses.indexOf(this.status)
+        if(!(this.timestamps.length === index+1))
+          this.timestamps.push(
+            `${currentTime.getHours()}:${String(
+              currentTime.getMinutes()
+            ).padStart(2, "0")}`
+          );
+        if(this.status === 'Done') window.localStorage.removeItem("order")
         this.value = 20 * (this.statuses.indexOf(this.status) + 1);
       }
     );

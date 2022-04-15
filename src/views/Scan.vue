@@ -1,6 +1,6 @@
 <template>
 <v-main style="overflow:hidden;">
-  <qrcode-stream class="qrcode"  @decode="onDecode"  @init="onInit"></qrcode-stream>
+  <qrcode-stream v-if="!orderNullUser" class="qrcode"  @decode="onDecode"  @init="onInit"></qrcode-stream>
 </v-main>
 </template>
 
@@ -12,9 +12,14 @@ export default {
   },
   data : () => ({
       isLandscape : false,
+      orderNullUser : false,
   }),
   created () {
       this.isLandscape = window.innerWidth > window.innerHeight;
+      const order = JSON.parse(window.localStorage.getItem("order"));
+      if(order){
+        this.$router.push({ name: "status", params: { id: order.id, restaurantName : order.restaurantName } })      
+      }
   },
   methods: {
     onDecode(decodedString) {

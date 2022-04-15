@@ -56,7 +56,7 @@
             </v-col>
         </v-row>
     </v-sheet>
-     <v-btn @click="placeOrder" class="descbutton">Place Order</v-btn>
+     <v-btn v-if="!fromOrders" @click="placeOrder" class="descbutton">Place Order</v-btn>
 </template>
 
 <script>
@@ -70,6 +70,10 @@ export default {
         resto : {
             type : String,
             default: '',
+        },
+        fromOrders : {
+            type : Boolean,
+            default: false,
         }
     },
     data: () => ({
@@ -89,17 +93,22 @@ export default {
             this.total = (this.tax + this.subtotal).toFixed(1)
         },
         async placeOrder (){
-            const order = {
+            let order = {
+                date: new Date(),
                 total : this.total,
                 user : window.localStorage.getItem('userId'),
-                ...this.restaurantInfo,
+                restaurantName : this.restaurantInfo.title,
+                img :  this.restaurantInfo.img,
+                status : 'Received',
+                id : this.restaurantInfo.id,
                 description : this.getDescription(),
                 lineItems : this.orderDetail,
                 token : window.localStorage.getItem('Message_Token')
             }
             const id = await addOrder(order);
+            order.id = id;
+            window.localStorage.setItem('order',JSON.stringify(order))
             this.$router.push({ name: "status", params: { id: id, restaurantName : this.restaurantInfo.title } })
-
         },
         getDescription () {
             let description = '';
@@ -112,12 +121,15 @@ export default {
             return description;
         },
         Back() {
-            this.$router.push({name: "menu", params : { id: this.restaurantInfo.id, orderRecapItems : JSON.stringify(this.orderDetail)}})
+            if(!this.fromOrders)
+                this.$router.push({name: "menu", params : { id: this.restaurantInfo.id, orderRecapItems : JSON.stringify(this.orderDetail)}})
+            this.$router.push({ name :'orders'})
         }   
     },
     created () {
         this.orderDetail = JSON.parse(this.order)
-        this.restaurantInfo = JSON.parse(this.resto)
+        if(!this.fromOrders)
+            this.restaurantInfo = JSON.parse(this.resto)
         this.calculateSubtotal()
     }
 }

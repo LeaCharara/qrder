@@ -1,5 +1,5 @@
 <template>
-  <v-list>
+  <v-list v-if="sortedOrders.length > 0">
     <v-list-item v-for="(o, index) in sortedOrders" :key="index">
       <div class="order">
           <v-card
@@ -13,6 +13,9 @@
       </div>
     </v-list-item>
   </v-list>
+  <div v-else>
+    <h2>No orders yet</h2>
+  </div>
 </template>
 
 <script>
@@ -52,6 +55,8 @@ export default {
     },
   },
   async created() {
+    if(!window.localStorage.getItem('userId')) 
+      this.$router.push({name : 'login', params : {fromOrders : true}})
     await this.getAllOrders();
   },
 };

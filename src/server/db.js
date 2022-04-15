@@ -37,7 +37,7 @@ const restaurantsCollection = collection(db,"restaurants")
 const ordersCollection = collection(db,"orders")
 
 export const getOrders = async (id) => {
-  const q = query(ordersCollection, where('user','==',id))
+  const q = query(ordersCollection, ...[where('user','==',id), where('status', '==', 'Done')])
   const Orders = await getDocs(q);
   let ord = []
   Orders.forEach((doc) => {
@@ -49,20 +49,39 @@ export const getOrders = async (id) => {
    return ord;
 }
 
+export const getOrderDetail = async (id) => {
+  const order = collection(db,"orders",id,"lineItems");
+  const orderDetail = await getDocs(order);
+  let items = []
+  orderDetail.forEach(async (doc) => {
+      items.push({quantity : doc.data().quantity, ref : doc.data().idItem})
+  })
+  let ind = 0
+  await Promise.all(items.map(async (i, index) => {
+      const item = await getDoc(i.ref);
+      items[index].price = item.data().price;
+      items[index].name = item.data().name;
+      delete i.ref
+      return ind + 1
+    }
+  ))
+  return items;
+}
+
 export const addOrder = async (order) => {
   const docRef = await addDoc(collection(db, "orders"), {
     date: new Date(),
     description: order.description,
     img : order.img,
-    restaurantName : order.title,
+    restaurantName : order.restaurantName,
     total : order.total,
     user : order.user,
-    status : 'Received',
+    status : order.status,
     token : order.token
   });
   order.lineItems.map(async item => {
     await addDoc(collection(db, "orders", docRef.id, 'lineItems'), {
-      idItem : `/restaurants/${order.id}/menu/${item.id}`,
+      idItem : doc(db,`/restaurants/${order.id}/menu/${item.id}`),
       quantity : item.quantity
     })
   })

@@ -17,23 +17,14 @@
           </v-list-item-subtitle>
         </v-col>
         <v-col sm="3" align-self="center">
-            <div v-if="order.status === 'Done' " class="text-center align">
+            <div class="text-center align">
                 <v-btn
                 rounded
                 color="normal"
                 dark
+                @click="Details"
                 >
                 Details
-                </v-btn>
-            </div>
-            <div v-else class="text-center align">
-                <v-btn
-                rounded
-                color="normal"
-                dark
-                @click="TrackOrder"
-                >
-                Track
                 </v-btn>
             </div>
         </v-col>
@@ -41,6 +32,7 @@
 </template>
 
 <script>
+import {getOrderDetail} from '../server/db.js'
 export default {
   props: {
     order: {
@@ -55,9 +47,10 @@ export default {
       date = date.toLocaleString('default', { month: 'short', day : 'numeric' });
       return date
       },
-      TrackOrder(){
-        this.$router.push({ name: "status", params: { id: this.order.id, restaurantName : this.order.restaurantName } })
-
+      async Details(){
+        const itemDetails = await getOrderDetail(this.order.id);
+        // console.log(JSON.stringify(itemDetails))
+        this.$router.push({name : 'recap', params: {order : JSON.stringify(itemDetails), fromOrders : true}})
       }
   },
   data() {

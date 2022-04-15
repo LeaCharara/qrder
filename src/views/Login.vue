@@ -56,6 +56,12 @@ import { getUser, SignIn, ui, uiConfig } from "../server/user";
 import "firebaseui/dist/firebaseui.css";
 
 export default {
+  props : {
+    fromOrders : {
+      type : Boolean,
+      default : false
+    }
+  },
 data: () => ({
     isValid: true,
     login: '',
@@ -78,7 +84,10 @@ data: () => ({
         const user = await SignIn(this.login, this.password);
         if (user) {
           window.localStorage.setItem("userId", user.uid);
-          this.$router.push({path: "/profile"});
+          if(this.fromOrders)
+            this.$router.push({ name: "Orders"});
+          else
+            this.$router.push({path: "/profile"});
         }  
       }
     }
@@ -89,6 +98,7 @@ data: () => ({
   },
 
   async created() {
+    console.log(this.fromOrders)
     let user = await getUser();
     if (user != null) 
         this.$router.push({path: "/profile"});
