@@ -4,7 +4,7 @@
       <v-card>
         <v-text-field
           @keyup="searchRestaurant"
-          placeholder="Search"
+          label="Search"
           v-model="search"
         ></v-text-field>
         <v-tabs center-active show-arrows>
@@ -32,7 +32,7 @@
     </v-main>
   </div>
   <v-main v-else>
-    <v-text-field placeholder="Search" v-model="search">Search</v-text-field>
+    <v-text-field @keyup="searchRestaurant" label="Search" v-model="search"></v-text-field>
     <v-card>
       <v-tabs center-active show-arrows>
         <v-tab @click="chosenType = 'All'">All</v-tab>
@@ -105,6 +105,7 @@ export default {
       this.filteredRestaurants = this.restaurants.filter((r) => {
         return r.title.toLowerCase().includes(this.search.toLowerCase());
       });
+      this.chosenRestaurantId = this.filteredRestaurants[0].id;
     },
   },
   watch: {
@@ -127,7 +128,7 @@ export default {
   async created() {
     await this.getAllRestaurants();
     if (this.BackchosenRestaurantId.length === 0)
-      this.chosenRestaurantId = this.restaurants[0].id;
+      this.chosenRestaurantId = this.filteredRestaurants[0].id;
     else this.chosenRestaurantId = this.BackchosenRestaurantId;
     this.isLandscape = window.innerWidth > window.innerHeight;
   },

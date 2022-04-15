@@ -41,8 +41,6 @@
 </template>
 
 <script>
-import moment from 'moment'
-
 export default {
   props: {
     order: {
@@ -53,13 +51,11 @@ export default {
   methods: {
     format_date(timestamp){
       const msTimestamp = timestamp * 1000
-      const date = new Date(msTimestamp)
-         if (date) {
-           return moment(String(date)).format('MMM Do')
-          }
+      let date = new Date(msTimestamp)
+      date = date.toLocaleString('default', { month: 'short', day : 'numeric' });
+      return date
       },
       TrackOrder(){
-        console.log(this.order)
         this.$router.push({ name: "status", params: { id: this.order.id, restaurantName : this.order.restaurantName } })
 
       }

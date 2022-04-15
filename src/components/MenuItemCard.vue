@@ -50,7 +50,7 @@ export default {
       default: () => {},
     },
     fromPageScan : {
-      type : String,
+      type : Boolean,
       default: false,
     }
   },

@@ -1,5 +1,5 @@
 import {initializeApp} from 'firebase/app'
-import { getFirestore,collection,doc, getDocs,getDoc, addDoc, query, where } from "firebase/firestore";
+import { initializeFirestore,collection,doc, getDocs,getDoc, addDoc, query, where, enableIndexedDbPersistence, CACHE_SIZE_UNLIMITED } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 import { async } from '@firebase/util';
 
@@ -16,7 +16,23 @@ export const config = {
 
 const firebaseApp = initializeApp(config);
 const auth = getAuth();
-export const db = getFirestore(firebaseApp);
+export const db = initializeFirestore(firebaseApp, {
+  cacheSizeBytes: CACHE_SIZE_UNLIMITED
+});
+enableIndexedDbPersistence(db)
+  .catch((err) => {
+      if (err.code == 'failed-precondition') {
+        console.log(err.code)
+          // Multiple tabs open, persistence can only be enabled
+          // in one tab at a a time.
+          // ...
+      } else if (err.code == 'unimplemented') {
+        console.log(err.code)
+          // The current browser does not support all of the
+          // features required to enable persistence
+          // ...
+      }
+  });
 const restaurantsCollection = collection(db,"restaurants")
 const ordersCollection = collection(db,"orders")
 
@@ -34,7 +50,6 @@ export const getOrders = async (id) => {
 }
 
 export const addOrder = async (order) => {
-  console.log(order);
   const docRef = await addDoc(collection(db, "orders"), {
     date: new Date(),
     description: order.description,
@@ -101,29 +116,4 @@ export const getRestaurantMenu = async(id) => {
 
   })
   return menuDictionary;
-}
-
-// export const getTokenFromFirebase = async () => {
-//   const token = await getToken(messaging, { vapidKey: 'BKMetiMUvVfMeO7BY1sYllLWcTBK-sVr456aMlYjt49jmNJodpBB42GUXX8IvYSkSwk1gcx0dNBJzyxjqcJau3U' , serviceWorkerRegistration : '../firebase-messaging-sw.js'})
-//   // getToken(messaging, { vapidKey: 'BKMetiMUvVfMeO7BY1sYllLWcTBK-sVr456aMlYjt49jmNJodpBB42GUXX8IvYSkSwk1gcx0dNBJzyxjqcJau3U' }).then((currentToken) => {
-//   //   if (currentToken) {
-//   //     console.log(currentToken)
-//   //     // Send the token to your server and update the UI if necessary
-//   //     // ...
-//   //   } else {
-//   //     // Show permission request UI
-//   //     console.log('No registration token available. Request permission to generate one.');
-//   //     // ...
-//   //   }
-//   // }).catch((err) => {
-//   //   console.log('An error occurred while retrieving token. ', err);
-//   //   // ...
-//   // });
-// }
-
-export const onMessageReceived = () => {
-  onMessage(messaging, (payload) => {
-    console.log('Message received. ', payload);
-    // ...
-})
 }

@@ -31,18 +31,19 @@ import { getRestaurant, getRestaurantMenu } from "../server/db.js";
 import MenuItemCard from "../components/MenuItemCard.vue";
 export default {
   name: "Menu",
-  props: {
+  props: 
+  {
     id : {
       type : String,
       default : ""
     },
     isLandscape : {
-      type : String,
-      default : 'false'
+      type : Boolean,
+      default : false
     },
     fromPageScan : {
       type : Boolean,
-      default : 'false'
+      default : false
     },
     orderRecapItems : {
       type : String,

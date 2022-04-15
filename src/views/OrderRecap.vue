@@ -86,7 +86,6 @@ export default {
         },
         calculateTax () {
             this.tax = parseFloat((this.subtotal * 0.15).toFixed(1))
-            console.log(this.tax + this.subtotal)
             this.total = (this.tax + this.subtotal).toFixed(1)
         },
         async placeOrder (){
