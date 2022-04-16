@@ -6,9 +6,10 @@
       v-model="isValid"
       ref="form"
       lazy-validation
+      align="center"
     >
 
-    Login
+ 
       <v-text-field
         class="field"
         v-model="login"
@@ -17,7 +18,6 @@
         required
       ></v-text-field>
   
-    Password
       <v-text-field
         v-model="password"
         class="field"
@@ -115,7 +115,6 @@ h1{
 .signin-btn{
   color : white;
   background-color : black;
-  margin-left: 65%;
 }
 .form{
 padding : 10%;
@@ -137,14 +136,11 @@ a, p {
   }
   .signin-btn{
   padding : 2%;
-    margin-left: 90%;
   }
-  #firebaseui-auth-container{
-    v.avatar, img {
-    margin : 0;
-    padding : 0;
+img.firebaseui-idp-icon {
+    margin-bottom: 0px;
+    padding: 0px;
+    }
   }
-  }
-  
- }
+
 </style>
