@@ -58,7 +58,6 @@ export default {
       },
       async Details(){
         const itemDetails = await getOrderDetail(this.order.id);
-        console.log(this.landscape)
         if(this.landscape)
           this.$emit('updateChosenOrder', {order : JSON.stringify(itemDetails)})
         else

@@ -10,7 +10,7 @@
 
     </v-btn>
 
-    <v-btn style="color:grey" to="/scan" @click="value='Scan'"    value="Scan">
+    <v-btn :disabled="!this.isOnLine" style="color:grey" to="/scan" @click="value='Scan'"    value="Scan">
       <v-icon>mdi-qrcode</v-icon>
       <span>Scan</span>
 
@@ -32,7 +32,11 @@
 
 <script>
   export default {
-    data: () => ({ value: 'Catalog', color : "black" }),
+    data: () => ({ value: 'Catalog', color : "black", isOnLine : navigator.onLine }),
+    mounted() {
+     window.addEventListener('online', ()=>{this.isOnLine=true});
+     window.addEventListener('offline', ()=>{this.isOnLine=false});
+  },
   }
 </script>
 

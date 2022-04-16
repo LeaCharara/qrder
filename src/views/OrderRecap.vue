@@ -92,7 +92,6 @@ export default {
     watch : {
         order (value) {
             this.orderDetail = JSON.parse(value)
-            console.log(this.orderDetail)
             this.calculateSubtotal()
         },
         isLandscape (value) {

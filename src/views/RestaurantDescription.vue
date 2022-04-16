@@ -12,7 +12,7 @@
       </v-row>
     </v-col>
     <v-col align="center" class="map">
-      <Map :lat="currentRestaurant.lat" :lng="currentRestaurant.lng" />
+      <Map v-if="isOnLine" :lat="currentRestaurant.lat" :lng="currentRestaurant.lng" />
     </v-col>
     <v-btn @click="showMenu" class="descbutton">GO TO MENU</v-btn>
     </v-col>
@@ -43,13 +43,15 @@ export default {
   data() {
     return {
       currentRestaurant: {},
-      
+      isOnLine : navigator.onLine
     };
   },
   mounted() {
         this.$nextTick(() => {
             window.addEventListener('resize', this.onScreenResize);
         })
+     window.addEventListener('online', ()=>{this.isOnLine=true});
+     window.addEventListener('offline', ()=>{this.isOnLine=false});
     },
     unmounted() { 
       window.removeEventListener('resize', this.onScreenResize); 
