@@ -12,30 +12,25 @@
         color="green"
       ></v-progress-linear>
     </div>
-
-    <p class="lol" :style="status === 'Received' ? 'color:green' : ''">
-      {{ timestamps[0] ? timestamps[0] : "--:--" }} Your order was received
-    </p>
-    <br /><br />
-    <p class="lol" :style="status === 'Preparing' ? 'color:green' : ''">
-      {{ timestamps[1] ? timestamps[1] : "--:--" }} Preparations are under way
-    </p>
-    <br /><br />
-    <p
-      class="lol"
+    <h3 class="status" :style="status === 'Received' ? 'color:green' : ''">
+     <v-icon v-if="doneStatuses.includes('Received')" style="color: green; margin-right : 10px;">mdi-checkbox-marked-circle</v-icon> Your order was received
+    </h3>
+    <h3 class="status" :style="status === 'Preparing' ? 'color:green' : ''">
+      <v-icon v-if="doneStatuses.includes('Preparing')" style="color: green; margin-right : 10px;">mdi-checkbox-marked-circle</v-icon>Preparations are under way
+    </h3>
+    <h3
+      class="status"
       :style="status === 'Ready to be served' ? 'color:green' : ''"
     >
-      {{ timestamps[2] ? timestamps[2] : "--:--" }} Ready to be served
-    </p>
-    <br /><br />
-    <p class="lol" :style="status === 'Serving' ? 'color:green' : ''">
-      {{ timestamps[3] ? timestamps[3] : "--:--" }} Anthony is serving you your
+      <v-icon v-if="doneStatuses.includes('Ready to be served')" style="color: green; margin-right : 10px;">mdi-checkbox-marked-circle</v-icon>Ready to be served
+    </h3>
+    <h3 class="status" :style="status === 'Serving' ? 'color:green' : ''">
+      <v-icon v-if="doneStatuses.includes('Serving')" style="color: green; margin-right : 10px;">mdi-checkbox-marked-circle</v-icon>Anthony is serving you your
       order
-    </p>
-    <br /><br />
-    <p class="lol" :style="status === 'Done' ? 'color:green' : ''">
-      {{ timestamps[4] ? timestamps[4] : "--:--" }} Your order has been served
-    </p>
+    </h3>
+    <h3 class="status" :style="status === 'Done' ? 'color:green' : ''">
+      <v-icon v-if="doneStatuses.includes('Done')" style="color: green; margin-right : 10px;">mdi-checkbox-marked-circle</v-icon>Your order has been served
+    </h3>
   </div>
 </template>
 
@@ -49,7 +44,7 @@ export default {
       value: 25,
       status: "Received",
       statuses: ["Received", "Preparing", "Ready to be served", "Serving", "Done"],
-      timestamps: [],
+      doneStatuses : []
     };
   },
   created() {
@@ -57,15 +52,9 @@ export default {
       doc(db, "orders", this.id),
       { includeMetadataChanges: true },
       (doc) => {
-        let currentTime = new Date();
         this.status = doc.data().status;
         const index = this.statuses.indexOf(this.status)
-        if(!(this.timestamps.length === index+1))
-          this.timestamps.push(
-            `${currentTime.getHours()}:${String(
-              currentTime.getMinutes()
-            ).padStart(2, "0")}`
-          );
+        this.doneStatuses = this.statuses.slice(0, index);
         if(this.status === 'Done') window.localStorage.removeItem("order")
         this.value = 20 * (this.statuses.indexOf(this.status) + 1);
       }
@@ -85,7 +74,9 @@ export default {
   background-color: black;
   display: flex;
 }
-.lol {
+.status {
   margin-left: 20px;
+  margin-bottom : 10px;
 }
+
 </style>

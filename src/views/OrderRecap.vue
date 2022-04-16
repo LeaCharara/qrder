@@ -1,6 +1,6 @@
 <template>
-    <div class="top-bar">
-        <v-icon @click="Back" style="margin-right: 20px"
+    <div v-if="!landscape" class="top-bar">
+        <v-icon v-if="isLandscape" @click="Back" style="margin-right: 20px"
         >mdi-arrow-left-thick</v-icon
         ><h3>Order Recap</h3>
     </div>
@@ -62,6 +62,7 @@
 <script>
 import {addOrder} from '../server/db.js'
 export default {
+    name : 'OrderRecap',
     props: {
         order: {
             type : String,
@@ -74,6 +75,10 @@ export default {
         fromOrders : {
             type : Boolean,
             default: false,
+        },
+        isLandscape : {
+            type : String,
+            default: false,
         }
     },
     data: () => ({
@@ -81,11 +86,26 @@ export default {
         tax : 0,
         total : 0,
         orderDetail : [],
-        restaurantInfo : {}
+        restaurantInfo : {},
+        landscape : false
     }),
+    watch : {
+        order (value) {
+            this.orderDetail = JSON.parse(value)
+            console.log(this.orderDetail)
+            this.calculateSubtotal()
+        },
+        isLandscape (value) {
+            this.landscape = JSON.parse(value)
+        },
+        resto (value) {
+            this.restaurantInfo = JSON.parse(value)
+        }
+    },
     methods: {
         calculateSubtotal () {
-            this.orderDetail.map(item => this.subtotal += item.price);
+            this.subtotal = 0;
+            this.orderDetail.map(item => this.subtotal += item.price * item.quantity);
             this.calculateTax()
         },
         calculateTax () {
@@ -93,6 +113,7 @@ export default {
             this.total = (this.tax + this.subtotal).toFixed(1)
         },
         async placeOrder (){
+            console.log(this.restaurantInfo)
             let order = {
                 date: new Date(),
                 total : this.total,
@@ -131,6 +152,7 @@ export default {
         if(!this.fromOrders)
             this.restaurantInfo = JSON.parse(this.resto)
         this.calculateSubtotal()
+        this.landscape = JSON.parse(this.isLandscape)
     }
 }
 </script>

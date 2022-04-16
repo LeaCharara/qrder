@@ -1,6 +1,40 @@
 <template>
-
-  <div class="top-bar">
+  <div v-if="isLandscape && this.$vuetify.display.mdAndUp && fromPageScan">
+    <v-navigation-drawer permanent left app style="width: 40% !important">
+     <div class="top-bar">
+    <v-icon v-if="!fromPageScan" @click="Back" style="margin-right: 20px"
+      >mdi-arrow-left-thick</v-icon
+    ><h3>{{ menu.title }}</h3>
+  </div>
+  <v-list>
+    <v-list-item v-for="(m, index) in menu.menu_types" :key="index">
+      <div class="menu">
+        <v-list-item-title class="item-types">{{ m.title }}</v-list-item-title>
+        <v-divider />
+        <v-card
+          class="item-card"
+          :elevation="1"
+          outlined
+          v-for="item in m.menu_items"
+          :key="item.name"
+          style="padding: 20px; margin-top: 20px"
+        >
+          <MenuItemCard :fromPageScan="fromPageScan" :item="item" @updateQuantity="updateQuantity($event)"/>
+        </v-card>
+      </div>
+    </v-list-item>
+  </v-list>
+    </v-navigation-drawer>
+    <v-main class="large-screen"> 
+      <OrderRecap 
+      :order="JSON.stringify(this.orderedItem)" 
+      :resto="JSON.stringify(this.restaurantInfo)"
+      :isLandscape="JSON.stringify(this.isLandscape)"
+      />
+    </v-main>
+  </div>
+  <div v-else>
+  <div class="top-bar" >
     <v-icon v-if="!fromPageScan" @click="Back" style="margin-right: 20px"
       >mdi-arrow-left-thick</v-icon
     ><h3>{{ menu.title }}</h3>
@@ -24,11 +58,13 @@
     </v-list-item>
   </v-list>
   <v-btn v-if="fromPageScan" @click="viewCart" class="orderbtn">Order</v-btn>
+  </div>
 </template>
 
 <script>
 import { getRestaurant, getRestaurantMenu } from "../server/db.js";
 import MenuItemCard from "../components/MenuItemCard.vue";
+import OrderRecap from "../views/OrderRecap.vue"
 export default {
   name: "Menu",
   props: 
@@ -52,6 +88,7 @@ export default {
   },
   components: {
     MenuItemCard,
+    OrderRecap
   },
   data: () => ({
     menu: {
@@ -59,7 +96,8 @@ export default {
       menu_types: {},
     },
     restaurantInfo : {},
-    orderedItem : []
+    orderedItem : [],
+    isLandscape : false
   }),
   methods: {
     async getMenu() {
@@ -88,21 +126,32 @@ export default {
         if (item.quantity === 0) this.orderedItem.splice(index, 1)
         else this.orderedItem[index] = {...item}
       }
-      else this.orderedItem.push({...item})
+      else if(item.quantity !== 0) this.orderedItem.push({...item})
+    },
+    onScreenResize() {
+      this.isLandscape = window.innerWidth > window.innerHeight;
     },
     viewCart(){
       this.$router.push({name: 'recap', params: {order:JSON.stringify(this.orderedItem), resto: JSON.stringify(this.restaurantInfo)}})
     }
   },
+  mounted() {
+    this.$nextTick(() => {
+      window.addEventListener("resize", this.onScreenResize);
+    });
+  },
+  unmounted() {
+    window.removeEventListener("resize", this.onScreenResize);
+  },
   async created() {
     await this.getMenu();
-    
+    this.isLandscape = window.innerWidth > window.innerHeight;
     
   },
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 
 .item-types {
   font-size: 20px;
@@ -130,4 +179,7 @@ export default {
   color : white;
 }
 
+.v-main.large-screen {
+  padding-left: 40% !important;
+}
 </style>
