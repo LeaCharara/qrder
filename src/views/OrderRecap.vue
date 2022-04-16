@@ -56,7 +56,7 @@
             </v-col>
         </v-row>
     </v-sheet>
-     <v-btn v-if="!fromOrders" @click="placeOrder" class="descbutton">Place Order</v-btn>
+     <v-btn v-if="!fromPageOrders" @click="placeOrder" class="descbutton">Place Order</v-btn>
 </template>
 
 <script>
@@ -147,9 +147,9 @@ export default {
         }   
     },
     created () {
+        this.fromPageOrders = this.fromOrders === 'true'
         if(this.order.length > 0){
             this.orderDetail = JSON.parse(this.order)
-            this.fromPageOrders = this.fromOrders === 'true'
             if(!this.fromPageOrders)
                 this.restaurantInfo = JSON.parse(this.resto)
             this.calculateSubtotal()
