@@ -65,7 +65,7 @@ export default {
         this.$router.push({path: "/"})
     },
     showMenu(){
-      this.$router.push({name: 'menu', params: {id: this.id, isLandscape: this.isLandscape}})
+      this.$router.push({name: 'menu', params: {id: this.id}})
     },
     onScreenResize() {
             if(window.innerWidth > window.innerHeight && this.$vuetify.display.mdAndUp){

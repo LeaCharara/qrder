@@ -50,12 +50,13 @@ export default {
       default: () => {},
     },
     fromPageScan : {
-      type : Boolean,
-      default: false,
+      type : String,
+      default: 'false',
     }
   },
   data: () => ({
-    currentItem : {}
+    currentItem : {},
+    fromScan : false
   }),
   methods: {
     add(){
@@ -70,6 +71,7 @@ export default {
   created () {
     this.currentItem = {...this.item}
     if(!this.item.quantity) this.currentItem.quantity = 0;
+    this.fromScan = this.fromPageScan === 'true'
   },
 };
 </script>

@@ -56,7 +56,7 @@
             </v-col>
         </v-row>
     </v-sheet>
-     <v-btn v-if="!fromOrders" @click="placeOrder" class="descbutton">Place Order</v-btn>
+     <v-btn v-if="!fromPageOrders" @click="placeOrder" class="descbutton">Place Order</v-btn>
 </template>
 
 <script>
@@ -73,12 +73,12 @@ export default {
             default: '',
         },
         fromOrders : {
-            type : Boolean,
-            default: false,
+            type : String,
+            default: 'false',
         },
         isLandscape : {
             type : String,
-            default: false,
+            default: 'false',
         }
     },
     data: () => ({
@@ -87,7 +87,8 @@ export default {
         total : 0,
         orderDetail : [],
         restaurantInfo : {},
-        landscape : false
+        landscape : false,
+        fromPageOrders : false
     }),
     watch : {
         order (value) {
@@ -148,13 +149,13 @@ export default {
     created () {
         if(this.order.length > 0){
             this.orderDetail = JSON.parse(this.order)
-            if(!this.fromOrders)
+            this.fromPageOrders = this.fromOrders === 'true'
+            if(!this.fromPageOrders)
                 this.restaurantInfo = JSON.parse(this.resto)
             this.calculateSubtotal()
             
         }
-        this.landscape = this.isLandscape
-
+        this.landscape = this.isLandscape === 'true'
     }
 }
 </script>

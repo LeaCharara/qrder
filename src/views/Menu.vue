@@ -52,7 +52,7 @@
           :key="item.name"
           style="padding: 20px; margin-top: 20px"
         >
-          <MenuItemCard :fromPageScan="fromPageScan" :item="item" @updateQuantity="updateQuantity($event)"/>
+          <MenuItemCard :fromPageScan="fromScan.toString()" :item="item" @updateQuantity="updateQuantity($event)"/>
         </v-card>
       </div>
     </v-list-item>
@@ -73,13 +73,9 @@ export default {
       type : String,
       default : ""
     },
-    isLandscape : {
-      type : Boolean,
-      default : false
-    },
     fromPageScan : {
-      type : Boolean,
-      default : false
+      type : String,
+      default : ''
     },
     orderRecapItems : {
       type : String,
@@ -97,7 +93,8 @@ export default {
     },
     restaurantInfo : {},
     orderedItem : [],
-    isLandscape : false
+    isLandscape : false,
+    fromScan : false,
   }),
   methods: {
     async getMenu() {
@@ -146,7 +143,7 @@ export default {
   async created() {
     await this.getMenu();
     this.isLandscape = window.innerWidth > window.innerHeight;
-    
+    this.fromScan = this.fromPageScan === 'true'
   },
 };
 </script>

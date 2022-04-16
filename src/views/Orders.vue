@@ -10,7 +10,7 @@
           outlined
           style="padding: 20px; margin-top: 20px"
         >
-          <OrderCard :order="o" :isLandscape="isLandscape" @updateChosenOrder="updateChosenOrder"/>
+          <OrderCard :order="o" :isLandscape="isLandscape.toString()" @updateChosenOrder="updateChosenOrder"/>
         </v-card>
       </div>
     </v-list-item>
@@ -20,7 +20,7 @@
   </div>
     </v-navigation-drawer>
     <v-main class="large-screen"> 
-      <OrderRecap :order="chosenOrder" :fromOrders="true" :isLandscape="true"/>
+      <OrderRecap :order="chosenOrder" :fromOrders="'true'" :isLandscape="'true'"/>
     </v-main>
   </div>
   <div v-else>
