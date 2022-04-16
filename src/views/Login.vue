@@ -128,5 +128,23 @@ padding : 10%;
 a, p {
   text-align: center;
 }
-
+ @media screen and (min-width: 780px) {
+   h1{
+    padding : 5%;
+  }
+  .form{
+  padding : 0% 5%;
+  }
+  .signin-btn{
+  padding : 2%;
+    margin-left: 90%;
+  }
+  #firebaseui-auth-container{
+    v.avatar, img {
+    margin : 0;
+    padding : 0;
+  }
+  }
+  
+ }
 </style>
