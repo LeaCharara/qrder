@@ -67,8 +67,6 @@
                     v-bind:disabled="currentPassword && password ? false : true"
                     @click:append="show2 = !show1"
                 ></v-text-field>
-
-                <p>Password must have 8+ characters, one uppercase character, one number and one special character.</p>
                 <div class="red--text"> {{errorMessage}}</div>
 
                 <v-btn
@@ -103,10 +101,10 @@ let user;
             show1 : false,
             show2 : false,
             passwordRules: [
-                v => (v && v.length >= 8) || 'Password must have 8+ characters',
-                v => /(?=.*[A-Z])/.test(v) || 'Must have one uppercase character', 
-                v => /(?=.*\d)/.test(v) || 'Must have one number', 
-                v => /([?.!@$%])/.test(v) || 'Must have one special character [?.!@#$%]'
+                v => (v && v.length >= 8) || 'Password must have 8+ characters, one uppercase character, one number and one special character.',
+                v => /(?=.*[A-Z])/.test(v) || 'Password must have 8+ characters, one uppercase character, one number and one special character.', 
+                v => /(?=.*\d)/.test(v) || 'Password must have 8+ characters, one uppercase character, one number and one special character.', 
+                v => /([?.!@$%])/.test(v) || 'Password must have 8+ characters, one uppercase character, one number and one special character.'
             ],
             emailRules: [
             v => !!v || 'E-mail is required',
@@ -199,10 +197,6 @@ let user;
                 i:last-of-type::before {
                     text-shadow: 0 0 2px black;
                 }
-            }
-            p{
-                font-size : 10px;
-                padding : 0% 10%;
             }
 
             .name {
