@@ -56,7 +56,7 @@
             </v-col>
         </v-row>
     </v-sheet>
-     <v-btn v-if="!fromPageOrders" @click="placeOrder" class="descbutton">Place Order</v-btn>
+     <v-btn v-if="!fromOrders" @click="placeOrder" class="descbutton">Place Order</v-btn>
 </template>
 
 <script>
