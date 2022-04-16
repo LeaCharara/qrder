@@ -3,10 +3,9 @@
         <v-col>
             <v-row align="end" justify="end" class="avatar-wrapper">
                 <h1> Editting Profile: </h1>
-                <v-avatar id="avatar" size="50vw" max max-height="300px" @click="changeAvatar"> 
+                <v-avatar id="avatar" size="50vw" max max-height="300px" > 
                     <v-icon v-if="photoURL == '' || photoURL == null" color="grey" size="112"> mdi-account-circle </v-icon>
                     <img v-else v-bind:src="t(photoURL)">
-                    <v-icon size="30" color="white">mdi-lead-pencil</v-icon>
                 </v-avatar>
             </v-row>
             </v-col>
@@ -18,6 +17,7 @@
                 >
                 <v-text-field
                     v-model="name"
+                    hide-details
                     label="Full Name"
                     v-bind:text="t(name)"
                     v-bind:placeholder="t(name_old)"
@@ -26,6 +26,7 @@
 
                 <v-text-field
                     v-model="currentPassword"
+                    hide-details
                     :append-icon="show ? 'mdi-eye' : 'mdi-eye-off'"
                     :rules="enabled ? passwordRules : ''"
                     :type="show ? 'text' : 'password'"
@@ -36,6 +37,7 @@
 
                 <v-text-field
                     v-model="email"
+                    hide-details
                     :rules="emailRules"
                     label="E-mail"
                     v-bind:text="t(email)"
@@ -45,6 +47,7 @@
 
                 <v-text-field
                     v-model="password"
+                    hide-details
                     :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
                     :rules="enabled && password ? passwordRules : ''"
                     :type="show ? 'text' : 'password'"
@@ -56,6 +59,7 @@
 
                 <v-text-field
                     v-model="confirmPassword"
+                    hide-details
                     :append-icon="show2 ? 'mdi-eye' : 'mdi-eye-off'"
                     :rules="enabled ? passwordRules && password : ''"
                     :type="show1 ? 'text' : 'password'"
@@ -128,9 +132,6 @@ let user;
                 this.name = this.name_old = userInfo[1];
                 this.email = this.email_old = userInfo[2];
             },
-            changeAvatar(){
-                console.log("hello")
-            },
             t(value) {
                 return value;
             },
@@ -169,7 +170,7 @@ let user;
                 h1 {
                     position: absolute;
                     top: 20%;
-                    left: 15%;
+                    left: 11%;
                     font-size : 25px;
                 }
             }
@@ -183,9 +184,6 @@ let user;
                 max-width: 100px;
 
                 img {
-                    filter: blur(2px);
-                    -webkit-filter: blur(2px);
-
                     width: 100%;
                     height: 100%;
                 }
@@ -227,5 +225,35 @@ let user;
             }
         }
     
+    }
+    @media screen and (min-width: 780px) {
+       #profile {
+           .v-text-field{
+                height : 4vw;
+        }
+        &.edit {
+        .avatar-wrapper {
+                padding: 2% 5%;
+        
+        h1{
+            font-size : 40px;
+            left: 9%;
+        }
+        }
+        
+        .v-avatar {
+            max-height: 200px;
+                max-width: 200px;
+                margin-right : 10%;
+                img{
+                    padding :0;
+                    margin: 0;
+                    width: 100%;
+
+                    height: 100%;
+                }
+            }
+       } 
+       }
     }
 </style>

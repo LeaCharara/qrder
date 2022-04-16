@@ -7,18 +7,17 @@
                     <img v-else v-bind:src="t(photoURL)">
                 </v-avatar>
             </v-row>
-            
                 <v-text-field
+                    hide-details
                     v-bind:label="t(name)"
                     value="John Doe"
-                    solo
                     disabled
                     prepend-icon="mdi-account"
                 ></v-text-field>
                 <v-text-field
+                    hide-details
                     v-bind:label="t(email)"
                     value="Email"
-                    solo
                     disabled
                     prepend-icon="mdi-email"
                 ></v-text-field>
@@ -38,7 +37,6 @@
     
     export default {
         name: "Profile",
-        show: false,
         
         data: () => ({
             photoURL: '',
@@ -83,12 +81,11 @@
 </script>
 
 <style lang="scss">
+
     #profile {
         
         .v-text-field{
-            padding : 0;
-            margin : 0;
-            height : 20vw;
+            margin : 10% 0%;
             width : 85%;
         }
         .v-avatar {
@@ -116,6 +113,24 @@
                 margin-top : 5%;
                 color: red;
             }
+
         
     }
+    @media screen and (min-width: 780px) {
+                #profile{
+                    .v-btn{ 
+                        padding : 20px;
+                        margin-top : 30px;  }
+                    .v-text-field{
+                        height : 4vw;
+                        width : 85%;
+                        margin : 0;
+                    }
+                }
+                
+                v.avatar, img{
+                    margin-bottom : 50px;
+                    padding : 50px;
+                }
+            }
 </style>

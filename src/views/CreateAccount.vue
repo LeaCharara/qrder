@@ -144,5 +144,22 @@ text-align : center;
   margin-bottom : 10%;
   margin-top : 10%;
 }
+ @media screen and (min-width: 780px) {
+   h1{
+
+  padding : 2%;
+}
+.form{
+padding : 0% 5%;
+} 
+p{
+font-size : 20px;
+}
+.create-btn{
+  margin : 0;
+  margin-left: 90%;
+  padding : 2%;
+}
+ }
 
 </style>
