@@ -1,6 +1,6 @@
 <template>
     <div v-if="!landscape" class="top-bar">
-        <v-icon v-if="isLandscape" @click="Back" style="margin-right: 20px"
+        <v-icon @click="Back" style="margin-right: 20px"
         >mdi-arrow-left-thick</v-icon
         ><h3>Order Recap</h3>
     </div>
@@ -113,7 +113,6 @@ export default {
             this.total = (this.tax + this.subtotal).toFixed(1)
         },
         async placeOrder (){
-            console.log(this.restaurantInfo)
             let order = {
                 date: new Date(),
                 total : this.total,
@@ -148,11 +147,15 @@ export default {
         }   
     },
     created () {
-        this.orderDetail = JSON.parse(this.order)
-        if(!this.fromOrders)
-            this.restaurantInfo = JSON.parse(this.resto)
-        this.calculateSubtotal()
-        this.landscape = JSON.parse(this.isLandscape)
+        if(this.order.length > 0){
+            this.orderDetail = JSON.parse(this.order)
+            if(!this.fromOrders)
+                this.restaurantInfo = JSON.parse(this.resto)
+            this.calculateSubtotal()
+            
+        }
+        this.landscape = this.isLandscape
+
     }
 }
 </script>

@@ -54,7 +54,7 @@ export default {
       (doc) => {
         this.status = doc.data().status;
         const index = this.statuses.indexOf(this.status)
-        this.doneStatuses = this.statuses.slice(0, index);
+        this.doneStatuses = this.statuses.slice(0, index+1);
         if(this.status === 'Done') window.localStorage.removeItem("order")
         this.value = 20 * (this.statuses.indexOf(this.status) + 1);
       }

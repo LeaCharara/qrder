@@ -39,6 +39,15 @@ export default {
       type: Object,
       default: () => {},
     },
+    isLandscape : {
+      type: String,
+      default: '',
+    }
+  },
+  watch : {
+    isLandscape (value){
+      this.landscape = JSON.parse(value)
+    }
   },
   methods: {
     format_date(timestamp){
@@ -49,15 +58,22 @@ export default {
       },
       async Details(){
         const itemDetails = await getOrderDetail(this.order.id);
-        // console.log(JSON.stringify(itemDetails))
+        console.log(this.landscape)
+        if(this.landscape)
+          this.$emit('updateChosenOrder', {order : JSON.stringify(itemDetails)})
+        else
         this.$router.push({name : 'recap', params: {order : JSON.stringify(itemDetails), fromOrders : true}})
       }
   },
   data() {
     return{
-      maxLength : 50
+      maxLength : 50,
+      landscape : false
     }
   },
+  created () {
+    this.landscape = this.isLandscape
+  }
 };
 </script>
 
@@ -68,4 +84,5 @@ h4 {
 .img-height{
   max-height: 200px;
 }
+
 </style>
