@@ -169,7 +169,15 @@ export default {
   .item-card{ max-height: 270px; }
   .item-types{ font-size: 30px;}
 }
+
+@media screen and (min-width: 380px) {
+  .orderbtn {
+  position : fixed;
+  bottom : 6%!important;
+  }
+}
 .orderbtn {
+  padding: 20px;
   width: 100%;
   position : fixed;
   bottom : 8%;
