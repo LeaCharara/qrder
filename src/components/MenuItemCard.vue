@@ -30,7 +30,7 @@
             item.description
           }}</v-list-item-subtitle>
         </v-row>
-        <v-col class="d-flex justify-center align-center" style="margin-top:5%" v-if="fromPageScan">
+        <v-col class="d-flex justify-center align-center" style="margin-top:5%" v-if="fromScan">
           <v-icon class="buttonIcons" style="margin-right : 10px" @click="substract">mdi-minus</v-icon>
           <span :class="[
                 this.$vuetify.display.smAndUp ? 'otherFontSize' : 'smallFontSize',
@@ -58,6 +58,11 @@ export default {
     currentItem : {},
     fromScan : false
   }),
+  watch: {
+    fromPageScan(value) {
+      this.fromScan = value === 'true'
+    }
+  },
   methods: {
     add(){
       this.currentItem.quantity = this.currentItem.quantity + 1;

@@ -33,7 +33,6 @@
     import { getAuth, signOut } from "firebase/auth";
     const auth = getAuth();
 
-
     
     export default {
         name: "Profile",
@@ -51,7 +50,7 @@
         async created() {
             const user = await getUser();
             if (user == null) {
-                this.$router.push({path: "/login"});
+                this.$router.push({name: "login"});
                 return false;
             }
             await this.getInfo();
@@ -68,13 +67,12 @@
                 return value;
             },
             edit(){
-                this.$router.push({path: "/profile/edit"});
+                this.$router.push({name: "Edit Profile"});
             },
-            logOut(){
+            async logOut(){
                 window.localStorage.removeItem("userId");
-                signOut(auth);
-                // this.$router.push({path: "/login"});
-                window.location.href = "/login";
+                await signOut(auth);
+                this.$router.push({name : 'login'});
             }
         }
     }

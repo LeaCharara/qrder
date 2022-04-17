@@ -19,7 +19,7 @@
           :key="item.name"
           style="padding: 20px; margin-top: 20px"
         >
-          <MenuItemCard :fromPageScan="fromPageScan" :item="item" @updateQuantity="updateQuantity($event)"/>
+          <MenuItemCard :fromPageScan="fromPageScan.toString()" :item="item" @updateQuantity="updateQuantity($event)"/>
         </v-card>
       </div>
     </v-list-item>

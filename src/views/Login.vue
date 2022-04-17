@@ -43,7 +43,7 @@
     <p>New here? Please sign up just here </p>
     
      <p><a
-        href="create"
+        @click="signUp"
         class="text-decoration-none"
         
       >Create account</a></p>
@@ -58,8 +58,8 @@ import "firebaseui/dist/firebaseui.css";
 export default {
   props : {
     fromOrders : {
-      type : Boolean,
-      default : false
+      type : String,
+      default : 'false'
     }
   },
 data: () => ({
@@ -74,6 +74,7 @@ data: () => ({
     passwordRules: [
       v => !!v || 'Password is required',
     ],
+    fromPageOrders : false,
   }),
 
   methods: {
@@ -84,12 +85,15 @@ data: () => ({
         const user = await SignIn(this.login, this.password);
         if (user) {
           window.localStorage.setItem("userId", user.uid);
-          if(this.fromOrders)
-            this.$router.push({ name: "Orders"});
+          if(this.fromPageOrders)
+            this.$router.push({ name: "orders"});
           else
-            this.$router.push({path: "/profile"});
+            this.$router.push({name: "Profile"});
         }  
       }
+    },
+    signUp(){
+      this.$router.push({name: "create", params: {fromOrders: this.fromPageOrders.toString()}})
     }
   },
 
@@ -98,10 +102,10 @@ data: () => ({
   },
 
   async created() {
-    console.log(this.fromOrders)
+    this.fromPageOrders = this.fromOrders === 'true'
     let user = await getUser();
     if (user != null) 
-        this.$router.push({path: "/profile"});
+        this.$router.push({name: "Profile"});
   }
 
 }

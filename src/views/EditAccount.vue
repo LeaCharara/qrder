@@ -151,7 +151,7 @@ let user;
                         }
                         const editted = await editAccount(email, password, name, photoURL);
                         if ( editted )
-                            this.$router.push({path: "/profile"});
+                            this.$router.push({name: "Profile"});
                 }
             }
         }

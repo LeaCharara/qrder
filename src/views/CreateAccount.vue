@@ -73,6 +73,12 @@
 import { CreateAccount } from "../server/user";
 
 export default {
+  props : {
+    fromOrders : {
+      type : String,
+      default : 'false'
+    }
+  },
 data: () => ({
     isValid: true,
     name: '',
@@ -100,9 +106,14 @@ data: () => ({
     phoneRules:[
       v => !!v && !isNaN(parseFloat(v)) || 'Phone is required',
       v => ( v.length = 10) || 'Phone number must have 10 digits',
-    ]
+    ],
+    fromPageOrders : false
   }),
-
+  watch : {
+    fromOrders(value) {
+      this.fromPageOrders = value === 'true'
+    }
+  },
   methods: {
     async validate () {
         if(this.password != this.confirmPassword)
@@ -113,11 +124,15 @@ data: () => ({
           const user = await CreateAccount(this.email, this.password, this.name);
           if (user) {
             window.localStorage.setItem("userId", user.uid);
-            this.$router.push({path: "/profile"});
+            if(fromPageOrders) this.$router.push({name: "Orders"});
+            this.$router.push({name: "Profile"});
           }  
         }
     },
   },
+  created () {
+    this.fromPageOrders = this.fromOrders === 'true'
+  }
 }
 
 </script>
