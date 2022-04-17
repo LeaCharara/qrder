@@ -27,6 +27,7 @@ export default {
     this.isLandscape = window.innerWidth > window.innerHeight;
     const token = await getToken(this.$messaging,{ vapidKey: "BKMetiMUvVfMeO7BY1sYllLWcTBK-sVr456aMlYjt49jmNJodpBB42GUXX8IvYSkSwk1gcx0dNBJzyxjqcJau3U" })
     window.localStorage.setItem("Message_Token", token);
+    navigator.serviceWorker.register('/service-worker.js', {scope: '/'})
   }
 };
 </script>

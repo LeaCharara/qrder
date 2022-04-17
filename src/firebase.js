@@ -20,7 +20,7 @@ const app = initializeApp(firebaseConfig);
 // Initialize Firebase Cloud Messaging and get a reference to the service
 export const messaging = getMessaging(app);
 
-onMessage(messaging, (payload) => {
+onMessage(messaging, async (payload) => {
     const notificationTitle = payload.notification.title;
     const notificationOptions = {
       body: payload.notification.body,
@@ -28,7 +28,7 @@ onMessage(messaging, (payload) => {
     };
           //var notification = //examples include this, seems not needed
 
-  
-    self.registration.showNotification(notificationTitle,
+    const reg = await navigator.serviceWorker.getRegistration();
+    reg.showNotification(notificationTitle,
       notificationOptions);
   });
