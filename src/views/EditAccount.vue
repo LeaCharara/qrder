@@ -223,7 +223,7 @@ let user;
     @media screen and (min-width: 780px) {
        #profile {
            .v-text-field{
-                height : 4vw;
+                height : 5vw;
         }
         &.edit {
         .avatar-wrapper {
