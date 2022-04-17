@@ -57,7 +57,7 @@
       </div>
     </v-list-item>
   </v-list>
-  <v-btn v-if="fromPageScan" @click="viewCart" class="orderbtn">Order</v-btn>
+  <v-btn v-if="fromPageScan" @click="viewCart" class="orderbtn">Review order</v-btn>
   </div>
 </template>
 
@@ -134,6 +134,7 @@ export default {
   },
   mounted() {
     this.$nextTick(() => {
+      console.log(this.$vuetify.display)
       window.addEventListener("resize", this.onScreenResize);
     });
   },
