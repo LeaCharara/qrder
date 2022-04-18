@@ -57,7 +57,6 @@
       <div class="red--text"> {{errorMessage}}</div>
 
       <v-btn
-        :disabled="!isValid"
         class="create-btn"
         @click="validate"
       >
@@ -124,7 +123,7 @@ data: () => ({
           const user = await CreateAccount(this.email, this.password, this.name);
           if (user) {
             window.localStorage.setItem("userId", user.uid);
-            if(fromPageOrders) this.$router.push({name: "Orders"});
+            if(this.fromPageOrders) this.$router.push({name: "Orders"});
             this.$router.push({name: "Profile"});
           }  
         }

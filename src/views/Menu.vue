@@ -134,7 +134,6 @@ export default {
   },
   mounted() {
     this.$nextTick(() => {
-      console.log(this.$vuetify.display)
       window.addEventListener("resize", this.onScreenResize);
     });
   },

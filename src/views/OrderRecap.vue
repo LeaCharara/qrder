@@ -100,6 +100,9 @@ export default {
         },
         resto (value) {
             this.restaurantInfo = JSON.parse(value)
+        },
+        fromOrders(value){
+            this.fromPageOrders = value === 'true'
         }
     },
     methods: {
@@ -141,8 +144,8 @@ export default {
             return description;
         },
         Back() {
-            if(!this.fromOrders)
-                this.$router.push({name: "menu", params : { id: this.restaurantInfo.id, orderRecapItems : JSON.stringify(this.orderDetail)}})
+            if(!this.fromPageOrders)
+                this.$router.push({name: "menu", params : { id: this.restaurantInfo.id, orderRecapItems : JSON.stringify(this.orderDetail), fromPageScan: 'true'}})
             this.$router.push({ name :'orders'})
         }   
     },

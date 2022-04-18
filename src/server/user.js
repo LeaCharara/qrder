@@ -73,16 +73,17 @@ export const CreateAccount = async (email, password, fullname) => {
         // alert(errorCode);
         return false;
     }); // User created, set name.
+    if(userCredential){
+        updateProfile(auth.currentUser, {
+                displayName: fullname
+            }).catch((error) => { // Error occured, delete user created.
+                deleteUser(userCredential.user);
+                return false;
+            });
 
-    updateProfile(auth.currentUser, {
-            displayName: fullname
-        }).catch((error) => { // Error occured, delete user created.
-            deleteUser(userCredential.user);
-            alert("Unexpected Error Occured! Please check user.js:CreateAccount");
-            return false;
-        });
-
-    return userCredential.user; // Created
+        return userCredential.user; // Created
+    }
+    return false;
 }
 
 export const SignIn = async (email, password) => {

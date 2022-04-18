@@ -2,10 +2,10 @@
     <div id="profile" class="edit">
         <v-col>
             <v-row align="end" justify="end" class="avatar-wrapper">
-                <h1> Editting Profile: </h1>
+                <h1> Editing Profile: </h1>
                 <v-avatar id="avatar" size="50vw" max max-height="300px" > 
                     <v-icon v-if="photoURL == '' || photoURL == null" color="grey" size="112"> mdi-account-circle </v-icon>
-                    <img v-else v-bind:src="t(photoURL)">
+                    <img v-else :src="t(photoURL)">
                 </v-avatar>
             </v-row>
             </v-col>
@@ -19,8 +19,8 @@
                     v-model="name"
                     hide-details
                     label="Full Name"
-                    v-bind:text="t(name)"
-                    v-bind:placeholder="t(name_old)"
+                    :text="t(name)"
+                    :placeholder="t(name_old)"
                     required
                 ></v-text-field>
 
@@ -28,10 +28,10 @@
                     v-model="currentPassword"
                     hide-details
                     :append-icon="show ? 'mdi-eye' : 'mdi-eye-off'"
-                    :rules="enabled ? passwordRules : ''"
+                    :rules="enabled ? passwordRules : []"
                     :type="show ? 'text' : 'password'"
                     label="Current Password"
-                    v-bind:disabled="enabled ? false : true "
+                    :disabled="enabled ? false : true "
                     @click:append="show = !show"
                 ></v-text-field> 
 
@@ -40,20 +40,20 @@
                     hide-details
                     :rules="emailRules"
                     label="E-mail"
-                    v-bind:text="t(email)"
-                    v-bind:placeholder="t(email_old)"
-                    v-bind:disabled="currentPassword ? false : true"
+                    :text="t(email)"
+                    :placeholder="t(email_old)"
+                    :disabled="currentPassword ? false : true"
                 ></v-text-field> 
 
                 <v-text-field
                     v-model="password"
                     hide-details
                     :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
-                    :rules="enabled && password ? passwordRules : ''"
-                    :type="show ? 'text' : 'password'"
+                    :rules="enabled && password ? passwordRules : []"
+                    :type="show1 ? 'text' : 'password'"
                     label="New Password"
-                    v-bind:disabled="currentPassword ? false : true"
-                    @click:append="show1 = !show"
+                    :disabled="currentPassword ? false : true"
+                    @click:append="show1 = !show1"
                 ></v-text-field> 
             
 
@@ -61,11 +61,11 @@
                     v-model="confirmPassword"
                     hide-details
                     :append-icon="show2 ? 'mdi-eye' : 'mdi-eye-off'"
-                    :rules="enabled ? passwordRules && password : ''"
-                    :type="show1 ? 'text' : 'password'"
+                    :rules="enabled ? passwordRules && password : []"
+                    :type="show2 ? 'text' : 'password'"
                     label="Confirm New Password"
                     v-bind:disabled="currentPassword && password ? false : true"
-                    @click:append="show2 = !show1"
+                    @click:append="show2 = !show2"
                 ></v-text-field>
                 <div class="red--text"> {{errorMessage}}</div>
 
