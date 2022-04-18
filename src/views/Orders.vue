@@ -1,6 +1,6 @@
 <template>
   <div v-if="isLandscape && this.$vuetify.display.mdAndUp">
-    <v-navigation-drawer permanent left app style="width: 40% !important">
+    <v-navigation-drawer permanent left app style="width: 50% !important">
       <v-list v-if="sortedOrders.length > 0">
         <v-list-item v-for="(o, index) in sortedOrders" :key="index">
           <div class="order">
@@ -127,6 +127,6 @@ export default {
   }
 }
 .v-main.large-screen {
-  padding-left: 40% !important;
+  padding-left: 50% !important;
 }
 </style>

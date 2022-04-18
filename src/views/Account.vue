@@ -21,9 +21,9 @@
                     disabled
                     prepend-icon="mdi-email"
                 ></v-text-field>
-                <v-btn @click="edit">Edit Profile</v-btn>
+                <v-btn :disabled="!isOnLine" @click="edit">Edit Profile</v-btn>
                 <p></p>
-                <v-btn @click="logOut" class="disconnect">Disconnect</v-btn>
+                <v-btn :disabled="!isOnLine" @click="logOut" class="disconnect">Disconnect</v-btn>
             </v-col>
     </div>
 </template>
@@ -40,11 +40,13 @@
         data: () => ({
             photoURL: '',
             name: '',
-            email: ''
+            email: '',
+            isOnLine : navigator.onLine
         }),
         
-        beforeMount() {
-
+        mounted() {
+            window.addEventListener('online', ()=>{this.isOnLine=true});
+            window.addEventListener('offline', ()=>{this.isOnLine=false});
         },
 
         async created() {

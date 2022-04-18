@@ -3,13 +3,10 @@
     <h1> Welcome back ! </h1>
     <v-form 
       class = "form"
-      v-model="isValid"
       ref="form"
       lazy-validation
       align="center"
     >
-
- 
       <v-text-field
         class="field"
         v-model="login"
@@ -30,7 +27,7 @@
       ></v-text-field>  
       
       <v-btn
-        :disabled="!isValid"
+      :disabled="!isOnLine"
         class="signin-btn"
         @click="validate"
       >
@@ -38,15 +35,17 @@
       </v-btn>
     </v-form>
     
-    <section id="firebaseui-auth-container"></section>
-
+    <section v-if="isOnLine" id="firebaseui-auth-container"></section>
+  <div>
     <p>New here? Please sign up just here </p>
     
      <p><a
         @click="signUp"
+        :disabled="!isOnLine"
         class="text-decoration-none"
-        
+        style="color : blue;"
       >Create account</a></p>
+  </div>
   </div>
 </template>
 
@@ -75,6 +74,7 @@ data: () => ({
       v => !!v || 'Password is required',
     ],
     fromPageOrders : false,
+    isOnLine : navigator.onLine
   }),
 
   methods: {
@@ -99,6 +99,8 @@ data: () => ({
 
   mounted() {
       ui.start("#firebaseui-auth-container", uiConfig);
+      window.addEventListener('online', ()=>{this.isOnLine=true});
+      window.addEventListener('offline', ()=>{this.isOnLine=false});
   },
 
   async created() {

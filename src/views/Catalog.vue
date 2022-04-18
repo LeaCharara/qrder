@@ -103,9 +103,12 @@ export default {
     },
     searchRestaurant() {
       this.filteredRestaurants = this.restaurants.filter((r) => {
-        return r.title.toLowerCase().includes(this.search.toLowerCase());
+        if(this.chosenType === "All")
+          return r.title.toLowerCase().includes(this.search.toLowerCase());
+        return r.title.toLowerCase().includes(this.search.toLowerCase()) && r.type === this.chosenType;
       });
-      this.chosenRestaurantId = this.filteredRestaurants[0].id;
+      if(this.filteredRestaurants.length > 0) 
+        this.chosenRestaurantId = this.filteredRestaurants[0].id;
     },
   },
   watch: {
@@ -115,6 +118,7 @@ export default {
         this.filteredRestaurants = this.restaurants.filter(
           (r) => r.type === value
         );
+      this.chosenRestaurantId = this.filteredRestaurants[0].id;
     },
   },
   mounted() {
