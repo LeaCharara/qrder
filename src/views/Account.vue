@@ -123,6 +123,7 @@
                         height : 4vw;
                         width : 85%;
                         margin : 0;
+                        margin-bottom : 30px;
                     }
                 }
                 
