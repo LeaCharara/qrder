@@ -99,6 +99,11 @@ export default {
   methods: {
     async getMenu() {
       const restaurant = await getRestaurant(this.id);
+      console.log(restaurant)
+      if(!restaurant.title) {
+        alert("Invalid QR CODE")
+        this.$router.push({name : 'scan'})
+      }
       this.restaurantInfo = {...restaurant}
       this.menu.title = restaurant.title;
       const menu = await getRestaurantMenu(this.id);
