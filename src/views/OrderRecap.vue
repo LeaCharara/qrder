@@ -56,7 +56,7 @@
             </v-col>
         </v-row>
     </v-sheet>
-     <v-btn v-if="!fromPageOrders" @click="placeOrder" class="descbutton">Place Order</v-btn>
+     <v-btn :disabled="this.orderDetail.length === 0" v-if="!fromPageOrders" @click="placeOrder" class="descbutton">Place Order</v-btn>
 </template>
 
 <script>
@@ -146,7 +146,8 @@ export default {
         Back() {
             if(!this.fromPageOrders)
                 this.$router.push({name: "menu", params : { id: this.restaurantInfo.id, orderRecapItems : JSON.stringify(this.orderDetail), fromPageScan: 'true'}})
-            this.$router.push({ name :'orders'})
+            else 
+                this.$router.push({ name :'orders'})
         }   
     },
     created () {

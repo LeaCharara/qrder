@@ -24,7 +24,6 @@ onMessage(messaging, async (payload) => {
     const notificationTitle = payload.notification.title;
     const notificationOptions = {
       body: payload.notification.body,
-      icon: '/firebase-logo.png'
     };
           //var notification = //examples include this, seems not needed
 

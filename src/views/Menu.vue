@@ -57,7 +57,7 @@
       </div>
     </v-list-item>
   </v-list>
-  <v-btn v-if="fromPageScan" @click="viewCart" class="orderbtn">Review order</v-btn>
+  <v-btn :disabled="orderedItem.length === 0" v-if="fromPageScan" @click="viewCart" class="orderbtn">Review order</v-btn>
   </div>
 </template>
 

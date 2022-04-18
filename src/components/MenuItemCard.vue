@@ -94,7 +94,7 @@ h4 {
 }
 
 .otherFontSize {
-  font-size: 24px;
+  font-size: 20px;
 }
 
 .buttonIcons {
