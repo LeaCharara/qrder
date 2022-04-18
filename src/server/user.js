@@ -30,7 +30,7 @@ export var uiConfig = {
         return true;
       }
     },
-    signInSuccessUrl: "/profile", // This redirect can be achived by route using callback.
+    signInSuccessUrl: "/", // This redirect can be achived by route using callback.
     signInFlow: "popup",
     signInOptions: [
                   {
