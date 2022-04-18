@@ -217,6 +217,9 @@ let user;
                 background-color : black;
                 border-left: solid thin black;
             }
+            .v-text-field{
+                margin-bottom : 20px;
+        }
         }
     
     }
